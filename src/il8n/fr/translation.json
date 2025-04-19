@@ -1,0 +1,42 @@
+{
+    "hero": {
+      "intro": "Salut, je suis un développeur basé à Provo, Utah.",
+      "tagline": "Création d'expériences web élégantes avec React & TypeScript.",
+      "cta": "Voir Mes Projets"
+    },
+    "projects": {
+      "title": "Mes Projets"
+    },
+    "about": {
+      "title": "À Propos De Moi",
+      "paragraph1": "Je suis un développeur web passionné, fortement axé sur la création d'applications web conviviales et performantes.",
+      "paragraph2": "Mon parcours dans le développement a commencé par une curiosité pour le fonctionnement d'Internet, et je suis accro depuis. J'aime transformer des idées complexes en solutions simples et élégantes.",
+      "paragraph3": "Je suis constamment en train d'apprendre et d'explorer de nouvelles technologies pour élargir mes compétences et rester à jour avec les dernières tendances de l'industrie."
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "N'hésitez pas à me contacter !",
+      "name": "Votre Nom",
+      "email": "Votre Email",
+      "message": "Votre Message",
+      "submit": "Envoyer le Message"
+    },
+    "techstack": {
+      "title": "Technologies"
+    },
+    "timeline": {
+      "title": "Mon Parcours de Développeur"
+    },
+    "resume": {
+      "title": "CV",
+      "filter": {
+        "all": "Tous",
+        "frontend": "Axé Frontend",
+        "fullstack": "Full-Stack"
+      },
+      "download": "Télécharger le PDF",
+      "experience": "Expérience",
+      "education": "Formation",
+      "skills": "Compétences"
+    }
+  }

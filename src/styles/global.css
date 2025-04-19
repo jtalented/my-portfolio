@@ -1,0 +1,91 @@
+/* styles/global.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-background);
+  color: var(--color-textPrimary);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-textPrimary);
+}
+
+p {
+  color: var(--color-textSecondary);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:root {
+  --color-background: #000;
+  --color-primary: #3498db;
+  --color-secondary: #9b59b6;
+  --color-textPrimary: #fff;
+  --color-textSecondary: #ddd;
+  --color-accent: #e74c3c;
+  --font-primary: sans-serif;
+  --font-secondary: monospace;
+}
+
+
+/* Glitch effect */
+.glitch {
+    position: relative;
+    color: var(--color-primary);
+    font-weight: bold;
+  }
+  
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  
+  .glitch::before {
+    animation: glitchTop 1s infinite linear alternate-reverse;
+    color: #0ff;
+    z-index: -1;
+  }
+  
+  .glitch::after {
+    animation: glitchBottom 1s infinite linear alternate-reverse;
+    color: #f0f;
+    z-index: -2;
+  }
+  
+  @keyframes glitchTop {
+    0% { clip: rect(0, 9999px, 0, 0); }
+    10% { clip: rect(0, 9999px, 8px, 0); transform: translate(-2px, -2px); }
+    20% { clip: rect(0, 9999px, 0, 0); }
+    30% { clip: rect(0, 9999px, 12px, 0); transform: translate(2px, 2px); }
+    100% { clip: rect(0, 9999px, 0, 0); }
+  }
+  
+  @keyframes glitchBottom {
+    0% { clip: rect(0, 9999px, 0, 0); }
+    10% { clip: rect(4px, 9999px, 14px, 0); transform: translate(2px, -2px); }
+    20% { clip: rect(0, 9999px, 0, 0); }
+    30% { clip: rect(10px, 9999px, 20px, 0); transform: translate(-2px, 2px); }
+    100% { clip: rect(0, 9999px, 0, 0); }
+  }
+  
