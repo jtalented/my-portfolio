@@ -48,7 +48,7 @@ const Contact = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <h2 className="text-3xl font-bold mb-6" style={{ color: theme.colors.primary }}>
+      <h2 className="text-6xl font-bold mb-6" style={{ color: theme.colors.primary }}>
         {t('Contact Me')}
       </h2>
 

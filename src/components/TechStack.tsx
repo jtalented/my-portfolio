@@ -115,7 +115,7 @@ const TechStack = () => {
       exit="exit"
       variants={containerVariants}
     >
-      <h2 className="text-3xl font-bold mb-8 text-center" style={{ color: theme.colors.primary }}>
+      <h2 className="text-6xl font-bold mb-8 text-center" style={{ color: theme.colors.primary }}>
         {t('Tech Stack')}
       </h2>
 

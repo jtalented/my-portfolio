@@ -20,9 +20,10 @@ const App = () => {
         <About />
         <TechStack />
         {/*<Projects />*/}
+        <Resume />
         <Timeline />
 
-        <Resume />
+        
         <Contact />
       </section>
     </Layout>

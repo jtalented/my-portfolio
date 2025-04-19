@@ -1,21 +1,12 @@
 // components/Resume.tsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../styles/theme';
 
 const Resume = () => {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<'frontend' | 'fullstack'>('frontend');
-  const [pdfUrl, setPdfUrl] = useState<string>('/resumes/resumefrontend.pdf');
-
-  useEffect(() => {
-    setPdfUrl(
-      filter === 'frontend'
-        ? '/resumes/resumefrontend.pdf'
-        : '/resumes/resumefullstack.pdf'
-    );
-  }, [filter]);
+  const pdfUrl = '/resumes/resumefrontend.pdf';
 
   const containerVariants = {
     initial: { opacity: 0 },
@@ -37,24 +28,17 @@ const Resume = () => {
         {t('Resume')}
       </h2>
 
-      {/* Filter + Download Buttons */}
+      {/* Filter Buttons (temporarily disabled) */}
+      {/*
       <div className="mb-8 flex justify-center flex-wrap gap-4">
         <button
-          className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-            filter === 'frontend'
-              ? 'bg-[#412F88] text-white'
-              : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-          }`}
+          className={`px-5 py-2 rounded-full text-sm font-semibold transition bg-[#412F88] text-white`}
           onClick={() => setFilter('frontend')}
         >
           Frontend
         </button>
         <button
-          className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-            filter === 'fullstack'
-              ? 'bg-[#722B6A] text-white'
-              : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-          }`}
+          className={`px-5 py-2 rounded-full text-sm font-semibold transition bg-gray-800 text-gray-300 hover:bg-gray-700`}
           onClick={() => setFilter('fullstack')}
         >
           Fullstack
@@ -67,11 +51,21 @@ const Resume = () => {
           {t('Download')}
         </a>
       </div>
+      */}
+
+      {/* Download Button */}
+      <div className="mb-8 flex justify-center">
+        <a
+          href={pdfUrl}
+          download
+          className="bg-[#A2264B] text-white px-6 py-3 rounded-full text-sm font-semibold transition hover:bg-[#D3212D]"
+        >
+          {t('Download')}
+        </a>
+      </div>
 
       {/* Gradient Frame with Animated Shimmer */}
-      <div
-        className="w-full h-[90vh] p-[3px] rounded-xl bg-gradient-to-r from-blue-700 via-purple-600 to-pink-500 animate-gradient-x"
-      >
+      <div className="w-full h-[90vh] p-[3px] rounded-xl bg-gradient-to-r from-blue-700 via-purple-600 to-pink-500 animate-gradient-x">
         <div className="w-full h-full bg-black rounded-lg overflow-hidden shadow-xl">
           <iframe
             src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`}
