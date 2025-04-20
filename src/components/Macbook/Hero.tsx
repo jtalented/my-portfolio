@@ -1,13 +1,19 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import SceneCanvas from './SceneCanvas';
 import { MacbookModelRef } from './MacbookModel';
+import useIsMobile from '../../hooks/useIsMobile';
+
+
+
 
 const Hero = () => {
   const [zoomIn, setZoomIn] = useState(false);
   const [rotationStart, setRotationStart] = useState(Math.PI);
   const [rotationDone, setRotationDone] = useState(false);
   const modelRef = useRef<MacbookModelRef>(null);
+
+  const isMobile = useIsMobile();
 
   const handleZoom = () => {
     if (modelRef.current) {
@@ -20,11 +26,9 @@ const Hero = () => {
 
   const handleBack = () => {
     setZoomIn(false);
-
-    // ⏱️ Delay resetting rotationDone so camera can zoom out
     setTimeout(() => {
       setRotationDone(false);
-    }, 1500); // Adjust this if you change camera animation speed
+    }, 1500);
   };
 
   return (
@@ -35,6 +39,7 @@ const Hero = () => {
         rotationDone={rotationDone}
         setRotationDone={setRotationDone}
         modelRef={modelRef}
+        isMobile={isMobile}
       />
 
       <motion.div
@@ -43,7 +48,7 @@ const Hero = () => {
         animate={{ opacity: zoomIn ? 0 : 1 }}
         transition={{ duration: 1, ease: 'easeOut' }}
       >
-        <motion.h1 className="text-5xl md:text-6xl font-bold text-white mb-4 pointer-events-auto">
+        <motion.h1 className="text-5xl md:text-6xl font-bold text-white mb-4 pointer-events-auto font-orbitron">
           Jayden Allen
         </motion.h1>
 
@@ -55,14 +60,16 @@ const Hero = () => {
           Crafting immersive experiences
         </motion.p>
 
-        <motion.button
-          onClick={handleZoom}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg pointer-events-auto"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Projects
-        </motion.button>
+        {!isMobile && (
+          <motion.button
+            onClick={handleZoom}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg pointer-events-auto"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Projects
+          </motion.button>
+        )}
       </motion.div>
 
       {zoomIn && rotationDone && (

@@ -9,7 +9,6 @@ import {
   SiSupabase, SiSalesforce, SiMysql, SiOracle, SiSqlite,
   SiJupyter, SiPostman
 } from 'react-icons/si';
-import { useTranslation } from 'react-i18next';
 import { theme } from '../styles/theme';
 
 interface TechStackItem {
@@ -85,7 +84,6 @@ const techStackData: TechStackItem[] = [
 const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps', 'ETL', 'Tools', 'AI Tools'];
 
 const TechStack = () => {
-  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [activeCategory, setActiveCategory] = useState('All');
   const [showAll, setShowAll] = useState(false);
@@ -120,9 +118,12 @@ const TechStack = () => {
       exit="exit"
       variants={containerVariants}
     >
-      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-center" style={{ color: theme.colors.primary }}>
-        {t('Tech Stack')}
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-center font-orbitron" style={{ color: theme.colors.primary }}>
+        {'Tech Stack'}
       </h2>
+
+
+
 
       {/* Tabs */}
       <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10">
@@ -143,6 +144,8 @@ const TechStack = () => {
           </button>
         ))}
       </div>
+
+
 
       {/* Grid */}
       <div className="relative min-h-[520px] transition-all duration-500 ease-in-out flex justify-center">
@@ -174,6 +177,7 @@ const TechStack = () => {
           </motion.div>
         </AnimatePresence>
       </div>
+
 
       {/* Show More */}
       {filteredStack.length > visibleLimit && !showAll && (

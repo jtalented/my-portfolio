@@ -46,12 +46,13 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
             mesh.material = (mesh.material as THREE.MeshStandardMaterial).clone();
             const mat = mesh.material as THREE.MeshStandardMaterial;
           
-            // Dark gray with subtle blue tint from your palette
-            mat.color = new THREE.Color('#1a1a2e'); // dark gray/blue
+
+
+            //Dark gray with subtle blue tint
+            mat.color = new THREE.Color('#1a1a2e');
             mat.roughness = 0.35;
             mat.metalness = 0.3;
-          
-            // Optional soft blue ambient reflection
+            //Optional soft blue ambient reflection
             mat.emissive = new THREE.Color('#222244'); 
             mat.emissiveIntensity = 0.05;
           
@@ -78,7 +79,9 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       });
     }, [scene]);
 
-    // 🆕 Reset rotation when zooming out
+
+
+    // Reset rotation when zooming out
     useEffect(() => {
       if (!zoomIn) {
         hasRotated.current = false;
@@ -89,7 +92,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     useFrame(() => {
       if (!modelRef.current) return;
 
-      // Check if the camera is in front of the screen
+      //Check if the camera is in front of the screen
       const screenNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(modelRef.current.quaternion);
       const cameraDirection = new THREE.Vector3().subVectors(
         camera.position,
@@ -98,7 +101,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       const dotProduct = screenNormal.dot(cameraDirection);
       setShowScreen(dotProduct > 0);
 
-      // ✨ Rotate into project view
+      //Rotate into project view
       if (zoomIn && rotationStart !== null && !hasRotated.current) {
         rotationProgress.current += 0.01;
         const t = Math.min(rotationProgress.current * 2, 1);
@@ -112,7 +115,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
         }
       }
 
-      // ✨ Auto-rotate when idle
+      //Auto-rotate when idle
       if (!zoomIn && !hasRotated.current) {
         modelRef.current.rotation.y += 0.002;
       }

@@ -1,11 +1,9 @@
 // components/Resume.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import { theme } from '../styles/theme';
 
 const Resume = () => {
-  const { t } = useTranslation();
   const pdfUrl = '/resumes/resumefrontend.pdf';
 
   const containerVariants = {
@@ -30,10 +28,10 @@ const Resume = () => {
       variants={containerVariants}
     >
       <h2
-        className="text-6xl font-bold mb-10 text-center"
+        className="text-6xl font-bold mb-10 text-center font-orbitron"
         style={{ color: theme.colors.primary }}
       >
-        {t('Resume')}
+        {'Resume'}
       </h2>
 
       {/* Filter Buttons (temporarily disabled) */}
@@ -68,9 +66,12 @@ const Resume = () => {
           download
           className="bg-[#A2264B] text-white px-6 py-3 rounded-full text-sm font-semibold transition hover:bg-[#D3212D]"
         >
-          {t('Download')}
+          {'Download'}
         </a>
       </div>
+
+
+
 
       {/* Gradient Frame with Animated Shimmer */}
       <div className="w-full max-h-[90vh] p-[3px] rounded-xl bg-gradient-to-r from-blue-700 via-purple-600 to-pink-500 animate-gradient-x">

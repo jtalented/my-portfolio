@@ -1,6 +1,4 @@
 // src/hooks/useSceneZoom.ts
-import { useState } from 'react';
-
 let setZoomState: (v: boolean) => void = () => {};
 
 export const useSceneZoom = () => {
@@ -9,7 +7,7 @@ export const useSceneZoom = () => {
     setTimeout(() => {
       const projects = document.getElementById('projects');
       projects?.scrollIntoView({ behavior: 'smooth' });
-    }, 1400); // wait for camera move
+    }, 1400);
   };
 
   return { zoomToProjects };

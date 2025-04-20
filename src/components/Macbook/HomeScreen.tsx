@@ -62,7 +62,7 @@ const apps: AppState[] = [
         <!-- GitHub button -->
         <div class="pt-4">
           <a
-            href="https://github.com/yourusername/march-madness-bracket"
+            href="https://github.com/jtalented"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-block bg-gray-900 text-white text-xs px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-md"
@@ -96,7 +96,6 @@ const apps: AppState[] = [
       bottom: '0px',
     },
   },
-  // Weather app example with custom styling
   {
     id: 'video',
     name: 'Automated Video Compiler',
@@ -138,7 +137,7 @@ const apps: AppState[] = [
         <!-- GitHub button -->
         <div class="pt-4">
           <a
-            href="https://github.com/yourusername/automated-video-compiler"
+            href="https://github.com/jtalented"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-block bg-gray-900 text-white text-xs px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-md"
@@ -203,6 +202,9 @@ const apps: AppState[] = [
   }
 ];
 
+
+
+
 const HomeScreen = () => {
   const [activeApp, setActiveApp] = useState<AppState | null>(null);
   const [anchorPos, setAnchorPos] = useState<DOMRect | null>(null);
@@ -215,6 +217,8 @@ const HomeScreen = () => {
     }
   }, [activeApp]);
 
+
+
   // Function to create unique style ID for each app
   const getStyleId = (appId: string) => `app-style-${appId}`;
 
@@ -226,6 +230,9 @@ const HomeScreen = () => {
       existingStyle.remove();
     }
 
+
+
+
     // Create new style element
     if (cssString) {
       const styleElement = document.createElement('style');
@@ -234,6 +241,9 @@ const HomeScreen = () => {
       document.head.appendChild(styleElement);
     }
   };
+
+
+
 
   // Inject styles when app becomes active
   useEffect(() => {
@@ -275,7 +285,7 @@ const HomeScreen = () => {
         className="rounded-md overflow-hidden shadow-2xl border border-white/10 bg-white flex flex-col"
         style={style}
       >
-        {/* Fake browser bar */}
+        {/* Fake browserbar */}
         <div className="flex items-center justify-between px-4 py-2 bg-gray-200 border-b border-gray-300 text-sm font-medium">
           <span className="text-gray-700">{activeApp.name}</span>
           <button
@@ -288,7 +298,7 @@ const HomeScreen = () => {
 
         {/* App Content Container */}
         <div className="flex-1 overflow-hidden flex flex-col">
-          {/* Injected HTML content or fallback */}
+          {/* InjectedHTML content or fallback */}
           {activeApp.htmlContent ? (
             <div 
               className="app-content flex-1"
@@ -305,6 +315,9 @@ const HomeScreen = () => {
     );
   }
 
+
+
+  
   return (
     <div className="w-full h-full px-6 pb-6 pt-16 select-none flex flex-col gap-6">
       {/* Banner */}

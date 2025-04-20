@@ -1,5 +1,5 @@
 import { Html } from '@react-three/drei';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef} from 'react';
 import { useFrame } from '@react-three/fiber';
 import HomeScreen from './HomeScreen';
 
@@ -47,6 +47,9 @@ const MacbookScreen = ({
     }
   });
 
+
+
+
   return (
     <>
       {/* Background screen with fade effect */}
@@ -87,6 +90,8 @@ const MacbookScreen = ({
           />
         </div>
       </Html>
+
+
 
       {/* App UI only if screen is on */}
       {screenOn && (

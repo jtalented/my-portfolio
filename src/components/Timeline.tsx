@@ -1,5 +1,5 @@
 // components/Timeline.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { theme } from '../styles/theme';
@@ -63,11 +63,13 @@ const Timeline = () => {
   return (
     <section id="timeline" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
       <h2
-        className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12"
+        className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 font-orbitron"
         style={{ color: theme.colors.primary }}
       >
         Timeline
       </h2>
+
+
 
       {/* Timeline Bar (hidden on mobile) */}
       <div className="relative mb-14 hidden sm:block">
@@ -92,6 +94,9 @@ const Timeline = () => {
         </div>
       </div>
 
+
+
+
       {/* Animated Card */}
       <div className="relative min-h-[240px] sm:min-h-[220px] mb-8 px-2">
         <AnimatePresence mode="wait">
@@ -113,6 +118,8 @@ const Timeline = () => {
           </motion.div>
         </AnimatePresence>
       </div>
+
+
 
       {/* Arrows */}
       <div className="flex justify-center gap-6 mt-4">

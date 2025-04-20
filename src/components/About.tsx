@@ -1,5 +1,4 @@
 // components/About.tsx
-import React from 'react';
 import { motion } from 'framer-motion';
 import { theme } from '../styles/theme';
 
@@ -9,17 +8,23 @@ const About = () => {
     animate: { opacity: 1, y: 0, transition: { duration: 0.8 } },
   };
 
+
+
+
+
   // Frame dimensions
   const frameWidthScale = 1.5;
   const frameHeightScale = 3;
   const frameScale = 1.5;
-  const frameX = 0; // no horizontal shift
   const frameY = 90;
   const imageScale = 1;
   const originalFrameSizeUnit = 84;
   const frameWidth = originalFrameSizeUnit * frameWidthScale * frameScale;
   const frameHeight = originalFrameSizeUnit * frameHeightScale * frameScale;
   const borderRadiusValue = Math.min(frameWidth, frameHeight) / 2;
+
+
+
 
   return (
     <motion.section
@@ -29,7 +34,7 @@ const About = () => {
       animate="animate"
       variants={containerVariants}
     >
-      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 text-center" style={{ color: theme.colors.primary }}>
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 text-center font-orbitron" style={{ color: theme.colors.primary }}>
         About Me
       </h2>
 
@@ -49,6 +54,8 @@ const About = () => {
             Outside of tech, I love both playing and watching sports, experimenting with side projects, and spending time with friends and family. I value continuous learning, collaboration, and building things that make a difference.
           </p>
         </div>
+
+
 
         {/* Image Section with Gradient Frame */}
         <div

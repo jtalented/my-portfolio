@@ -1,15 +1,14 @@
-// styles/theme.ts
 export const theme = {
     colors: {
       background: '#000',
-      primary: '#3498db', // Blue
-      secondary: '#9b59b6', // Purple/Red (adjust as needed)
+      primary: '#3498db',
+      secondary: '#9b59b6',
       textPrimary: '#fff',
       textSecondary: '#ddd',
-      accent: '#e74c3c', // Example accent color
+      accent: '#e74c3c',
     },
     fonts: {
-      primary: 'sans-serif', // Choose your preferred font
+      primary: 'sans-serif',
       secondary: 'monospace',
     },
   };

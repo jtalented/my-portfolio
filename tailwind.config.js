@@ -12,6 +12,9 @@ export default {
         magenta: "#AC5EFF",
         violet: "#9376E0",
       },
+      fontFamily: {
+        orbitron: ['"Orbitron"', 'sans-serif'],
+      }      
     },
   },
   plugins: [],

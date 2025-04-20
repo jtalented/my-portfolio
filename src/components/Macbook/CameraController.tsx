@@ -21,7 +21,7 @@ const CameraController = ({ zoomIn, rotationDone }: CameraControllerProps) => {
     progress.current = 0;
     curve.current = null;
 
-    console.log('[CameraController] zoomIn changed to:', zoomIn);
+    //console.log('[CameraController] zoomIn changed to:', zoomIn);
   }, [zoomIn, rotationDone]);
 
   useFrame((_, delta) => {
@@ -40,17 +40,19 @@ const CameraController = ({ zoomIn, rotationDone }: CameraControllerProps) => {
         : new THREE.Vector3(-4, 2.5, 6);
 
       if (zoomIn) {
-        // Going in: use camera position
+
+
+        // Going in use camera position
         start = camera.position.clone();
       } else {
-        // Going out: use cached end of zoom-in
+        // Going out use cached end of zoom-in
         start = cachedZoomInEnd.current
           ? cachedZoomInEnd.current.clone()
           : camera.position.clone(); // fallback
       }
 
       curve.current = new THREE.CatmullRomCurve3([start, control, end]);
-      console.log('[CameraController] Created new', zoomIn ? 'zoom-in' : 'zoom-out', 'curve');
+      //console.log('[CameraController] Created new', zoomIn ? 'zoom-in' : 'zoom-out', 'curve');
     }
 
     const point = curve.current.getPoint(t);
@@ -64,14 +66,16 @@ const CameraController = ({ zoomIn, rotationDone }: CameraControllerProps) => {
 
     camera.lookAt(lookTarget);
 
+
+
     // Cache zoom-in end position for use in zoom-out
     if (zoomIn && t === 1) {
       cachedZoomInEnd.current = camera.position.clone();
-      console.log('[CameraController] Cached zoom-in end position');
+      //console.log('[CameraController] Cached zoom-in end position');
     }
 
     if (t === 1) {
-      console.log('[CameraController] Finished', zoomIn ? 'zoom-in' : 'zoom-out');
+      //console.log('[CameraController] Finished', zoomIn ? 'zoom-in' : 'zoom-out');
     }
   });
 

@@ -1,32 +1,22 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
 import { theme } from '../styles/theme';
 import emailjs from 'emailjs-com';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 const Contact = () => {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [verified, setVerified] = useState(false);
-
-  // 👇 Replace with your actual base64-encoded keys
   const SERVICE_ID = atob('c2VydmljZV9iNWg2N3Ns');
   const TEMPLATE_ID = atob('dGVtcGxhdGVfcjd2MjQ0cA==');
   const PUBLIC_KEY = atob('UnFEQktkTkJDeGMyN1JSYXk=');
-  const RECAPTCHA_KEY = atob('NkxlVkJCNHJBQUFBQUdKaVcxZTBqSTBaNHFRck5UYW03QjZLYmxBdQ==');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleVerify = () => setVerified(true);
-
   const sendEmail = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!verified) return alert('Please complete the reCAPTCHA.');
 
     setStatus('sending');
 
@@ -48,8 +38,8 @@ const Contact = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <h2 className="text-6xl font-bold mb-6" style={{ color: theme.colors.primary }}>
-        {t('Contact Me')}
+      <h2 className="text-6xl font-bold mb-6 font-orbitron" style={{ color: theme.colors.primary }}>
+        {'Contact Me'}
       </h2>
 
       {/* Contact Form */}
@@ -83,13 +73,7 @@ const Contact = () => {
             required
           />
 
-          <div className="flex justify-center">
-            <ReCAPTCHA
-              sitekey={RECAPTCHA_KEY}
-              onChange={handleVerify}
-              theme="dark"
-            />
-          </div>
+
 
 
           <button
@@ -97,7 +81,7 @@ const Contact = () => {
             className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-full transition"
             disabled={status === 'sending'}
           >
-            {status === 'sending' ? 'Sending...' : t('Submit')}
+            {status === 'sending' ? 'Sending...' : 'Submit'}
           </button>
 
           {status === 'sent' && (
@@ -109,9 +93,12 @@ const Contact = () => {
         </form>
       </div>
 
+
+
+
       {/* Text and Icons */}
       <p className="text-lg mt-12 mb-2 text-gray-400">
-        {t('Reach out on other platforms')}
+        {'Reach out on other platforms'}
       </p>
 
       <div className="flex justify-center gap-6 mb-8">

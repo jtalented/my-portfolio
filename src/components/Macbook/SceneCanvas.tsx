@@ -10,7 +10,10 @@ interface Props {
   rotationDone: boolean;
   setRotationDone: (done: boolean) => void;
   modelRef: React.RefObject<MacbookModelRef>;
+  isMobile?: boolean;
 }
+
+
 
 const SceneCanvas = ({
   zoomIn,
@@ -18,12 +21,15 @@ const SceneCanvas = ({
   rotationDone,
   setRotationDone,
   modelRef,
+  isMobile = false,
 }: Props) => {
   return (
-    // 🔧 This is the anchor your HomeScreen uses to mount the iframe
     <div id="macbook-app-anchor" className="relative w-full">
       <Canvas
-        camera={{ position: [0, 1.6, 6], fov: 26 }}
+        camera={{
+          position: isMobile ? [0, 1.6, 9] : [0, 1.6, 6],
+          fov: isMobile ? 30 : 26,
+        }}
         gl={{ alpha: true }}
         style={{
           position: 'absolute',
@@ -42,14 +48,12 @@ const SceneCanvas = ({
         }}
       >
         <Suspense fallback={null}>
-          {/* Lighting */}
           <ambientLight intensity={1.4} />
           <directionalLight position={[4, 6, 4]} intensity={1.8} />
           <directionalLight position={[-4, 4, -3]} intensity={1.4} />
           <directionalLight position={[0, -4, 0]} intensity={1.8} />
           <directionalLight position={[0, 4, 0]} intensity={1.8} />
 
-          {/* Macbook 3D Model */}
           <MacbookModel
             ref={modelRef}
             zoomIn={zoomIn}
@@ -58,7 +62,9 @@ const SceneCanvas = ({
             screenOn={zoomIn && rotationDone}
           />
 
-          {/* Camera behavior */}
+
+
+
           <CameraController zoomIn={zoomIn} rotationDone={rotationDone} />
 
           <OrbitControls

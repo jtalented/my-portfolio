@@ -30,14 +30,12 @@ const staticProjects: Project[] = [
     live_demo_url: 'https://tasktracker.example.com',
     tech_stack: ['React', 'Node.js', 'Express', 'MongoDB'],
   },
-  // Add more projects here as needed
 ];
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    // Simulate fetch delay
     setTimeout(() => {
       setProjects(staticProjects);
     }, 500);
