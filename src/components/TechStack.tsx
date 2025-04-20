@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot,
@@ -17,6 +17,18 @@ interface TechStackItem {
   category: string;
   icon: () => JSX.Element;
 }
+
+// Hook to detect if it's mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return isMobile;
+};
 
 const techStackData: TechStackItem[] = [
   // Frontend
@@ -74,6 +86,7 @@ const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps', 'ETL', '
 
 const TechStack = () => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [activeCategory, setActiveCategory] = useState('All');
   const [showAll, setShowAll] = useState(false);
 
@@ -83,16 +96,8 @@ const TechStack = () => {
       : techStackData.filter((tech) => tech.category === activeCategory);
   }, [activeCategory]);
 
-  const columnCount = useMemo(() => {
-    const count = filteredStack.length;
-    if (count <= 4) return 2;
-    if (count <= 6) return 3;
-    if (count <= 12) return 4;
-    return 6;
-  }, [filteredStack]);
-
-  const VISIBLE_LIMIT = columnCount * 6;
-  const visibleStack = showAll ? filteredStack : filteredStack.slice(0, VISIBLE_LIMIT);
+  const visibleLimit = isMobile ? 12 : 36;
+  const visibleStack = showAll ? filteredStack : filteredStack.slice(0, visibleLimit);
 
   const containerVariants = {
     initial: { opacity: 0 },
@@ -109,18 +114,18 @@ const TechStack = () => {
   return (
     <motion.section
       id="techstack"
-      className="py-16"
+      className="py-24 px-4 sm:px-6 lg:px-8 mt-32"
       initial="initial"
       animate="animate"
       exit="exit"
       variants={containerVariants}
     >
-      <h2 className="text-6xl font-bold mb-8 text-center" style={{ color: theme.colors.primary }}>
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-center" style={{ color: theme.colors.primary }}>
         {t('Tech Stack')}
       </h2>
 
       {/* Tabs */}
-      <div className="flex flex-wrap justify-center gap-4 mb-10">
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10">
         {categories.map((category) => (
           <button
             key={category}
@@ -128,7 +133,7 @@ const TechStack = () => {
               setActiveCategory(category);
               setShowAll(false);
             }}
-            className={`px-6 py-2 rounded-full text-base font-semibold transition ${
+            className={`px-5 sm:px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition ${
               activeCategory === category
                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                 : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
@@ -139,19 +144,17 @@ const TechStack = () => {
         ))}
       </div>
 
-      {/* Grid + Items */}
+      {/* Grid */}
       <div className="relative min-h-[520px] transition-all duration-500 ease-in-out flex justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory + String(showAll)}
-            className={`grid gap-8 justify-items-center ${
-              columnCount === 2
+            className={`grid gap-6 sm:gap-8 justify-items-center ${
+              visibleStack.length <= 2
                 ? 'grid-cols-2'
-                : columnCount === 3
-                ? 'grid-cols-3'
-                : columnCount === 4
-                ? 'grid-cols-4'
-                : 'grid-cols-6'
+                : visibleStack.length <= 4
+                ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-4'
+                : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6'
             }`}
             variants={containerVariants}
             initial="initial"
@@ -165,15 +168,15 @@ const TechStack = () => {
                 variants={itemVariants}
               >
                 {tech.icon()}
-                <span className="text-gray-300 text-center">{tech.name}</span>
+                <span className="text-gray-300 text-center text-sm sm:text-base">{tech.name}</span>
               </motion.div>
             ))}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Show More Button */}
-      {filteredStack.length > VISIBLE_LIMIT && !showAll && (
+      {/* Show More */}
+      {filteredStack.length > visibleLimit && !showAll && (
         <div className="flex justify-center mt-8">
           <button
             onClick={() => setShowAll(true)}

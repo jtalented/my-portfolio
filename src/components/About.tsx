@@ -13,7 +13,7 @@ const About = () => {
   const frameWidthScale = 1.5;
   const frameHeightScale = 3;
   const frameScale = 1.5;
-  const frameX = 200;
+  const frameX = 0; // no horizontal shift
   const frameY = 90;
   const imageScale = 1;
   const originalFrameSizeUnit = 84;
@@ -24,18 +24,21 @@ const About = () => {
   return (
     <motion.section
       id="about"
-      className="py-16"
+      className="py-16 px-4 sm:px-6 lg:px-8"
       initial="initial"
       animate="animate"
       variants={containerVariants}
     >
-      <h2 className="text-6xl font-bold mb-12 text-center" style={{ color: theme.colors.primary }}>
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 text-center" style={{ color: theme.colors.primary }}>
         About Me
       </h2>
 
-      <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-10 max-w-4xl mx-auto px-4">
+      <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-10 max-w-5xl mx-auto">
         {/* Text Section */}
-        <div className="flex-1 text-lg space-y-5" style={{ color: theme.colors.textSecondary }}>
+        <div
+          className="flex-1 text-base sm:text-lg space-y-5"
+          style={{ color: theme.colors.textSecondary }}
+        >
           <p>
             Hey, I’m Jayden Allen — a developer, student, and builder who loves solving real-world problems with clean, scalable code. I'm currently studying Computer Science at BYU, where I’ve built a strong foundation in systems design, full stack engineering, and creative problem-solving.
           </p>
@@ -50,7 +53,7 @@ const About = () => {
         {/* Image Section with Gradient Frame */}
         <div
           className="flex-1 flex justify-center mt-10 md:mt-0"
-          style={{ transform: `translateX(${frameX}px) translateY(${frameY}px)` }}
+          style={{ transform: `translateY(${frameY}px)` }}
         >
           <div
             className="p-1 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x"

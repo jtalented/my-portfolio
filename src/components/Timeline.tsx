@@ -1,3 +1,4 @@
+// components/Timeline.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -60,16 +61,16 @@ const Timeline = () => {
   };
 
   return (
-    <section id="timeline" className="py-20 px-6 max-w-5xl mx-auto text-center">
+    <section id="timeline" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
       <h2
-        className="text-6xl font-bold mb-12"
+        className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12"
         style={{ color: theme.colors.primary }}
       >
         Timeline
       </h2>
 
-      {/* Timeline Bar */}
-      <div className="relative mb-14">
+      {/* Timeline Bar (hidden on mobile) */}
+      <div className="relative mb-14 hidden sm:block">
         <div className="w-full h-1 bg-gray-700 rounded-full absolute top-1/2 transform -translate-y-1/2" />
         <div className="flex justify-between relative z-10 px-4">
           {timelineData.map((item, i) => (
@@ -92,7 +93,7 @@ const Timeline = () => {
       </div>
 
       {/* Animated Card */}
-      <div className="relative h-[240px] md:h-[220px]">
+      <div className="relative min-h-[240px] sm:min-h-[220px] mb-8 px-2">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
@@ -102,10 +103,10 @@ const Timeline = () => {
             animate="animate"
             exit="exit"
           >
-            <h3 className="text-xl text-white font-semibold mb-1">
+            <h3 className="text-lg sm:text-xl text-white font-semibold mb-1">
               {event.year}
             </h3>
-            <h4 className="text-lg text-blue-400 font-medium mb-2">
+            <h4 className="text-base sm:text-lg text-blue-400 font-medium mb-2">
               {event.title}
             </h4>
             <p className="text-sm text-gray-300">{event.description}</p>
@@ -114,20 +115,20 @@ const Timeline = () => {
       </div>
 
       {/* Arrows */}
-      <div className="flex justify-center gap-6">
+      <div className="flex justify-center gap-6 mt-4">
         <button
           onClick={handlePrev}
           className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition"
           aria-label="Previous"
         >
-          <FaChevronLeft className="text-white" />
+          <FaChevronLeft className="text-white w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           onClick={handleNext}
           className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition"
           aria-label="Next"
         >
-          <FaChevronRight className="text-white" />
+          <FaChevronRight className="text-white w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
     </section>
