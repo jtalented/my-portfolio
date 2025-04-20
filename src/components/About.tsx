@@ -84,7 +84,7 @@ const About = () => {
               }}
             >
               <img
-                src="/images/IMG_1993 (3).PNG"
+                src={`${import.meta.env.BASE_URL}images/IMG_1993 (3).PNG`}
                 alt="Jayden Allen"
                 className="w-full h-full object-cover object-center"
                 style={{

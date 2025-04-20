@@ -23,7 +23,7 @@ const apps: AppState[] = [
   {
     id: 'march',
     name: 'March Madness',
-    icon: '/icons/march.svg',
+    icon: `${import.meta.env.BASE_URL}icons/march.svg`,
     color: 'bg-blue-500/20',
     htmlContent: `
       <div class="flex-1 p-6 overflow-auto text-sm text-gray-700 font-sans">
@@ -317,7 +317,7 @@ const HomeScreen = () => {
 
 
 
-  
+
   return (
     <div className="w-full h-full px-6 pb-6 pt-16 select-none flex flex-col gap-6">
       {/* Banner */}

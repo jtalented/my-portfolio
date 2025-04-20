@@ -55,12 +55,14 @@ const SceneCanvas = ({
           <directionalLight position={[0, 4, 0]} intensity={1.8} />
 
           <MacbookModel
-            ref={modelRef}
-            zoomIn={zoomIn}
-            rotationStart={rotationStart}
-            onRotationComplete={() => setRotationDone(true)}
-            screenOn={zoomIn && rotationDone}
-          />
+  ref={modelRef}
+  zoomIn={zoomIn}
+  rotationStart={rotationStart}
+  onRotationComplete={() => setRotationDone(true)}
+  screenOn={zoomIn && rotationDone}
+  isMobile={isMobile}
+/>
+
 
 
 

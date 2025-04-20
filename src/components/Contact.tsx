@@ -33,17 +33,19 @@ const Contact = () => {
   return (
     <motion.section
       id="contact"
-      className="py-16 text-center"
+      className="py-16 px-4 sm:px-6 lg:px-8 text-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <h2 className="text-6xl font-bold mb-6 font-orbitron" style={{ color: theme.colors.primary }}>
-        {'Contact Me'}
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 font-orbitron" style={{ color: theme.colors.primary }}>
+        Contact Me
       </h2>
 
+
+
       {/* Contact Form */}
-      <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-lg">
+      <div className="w-full max-w-lg mx-auto bg-gray-900 p-6 sm:p-8 rounded-lg shadow-lg">
         <form onSubmit={sendEmail} className="space-y-4">
           <input
             type="text"
@@ -51,7 +53,7 @@ const Contact = () => {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none"
+            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none text-sm sm:text-base"
             required
           />
           <input
@@ -60,7 +62,7 @@ const Contact = () => {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none"
+            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none text-sm sm:text-base"
             required
           />
           <textarea
@@ -69,10 +71,9 @@ const Contact = () => {
             value={formData.message}
             onChange={handleChange}
             rows={5}
-            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none"
+            className="w-full bg-gray-800 text-white px-4 py-3 rounded-md border border-gray-700 focus:outline-none text-sm sm:text-base"
             required
           />
-
 
 
 
@@ -93,23 +94,32 @@ const Contact = () => {
         </form>
       </div>
 
-
-
-
       {/* Text and Icons */}
-      <p className="text-lg mt-12 mb-2 text-gray-400">
-        {'Reach out on other platforms'}
+      <p className="text-base sm:text-lg mt-12 mb-2 text-gray-400">
+        Reach out on other platforms
       </p>
 
-      <div className="flex justify-center gap-6 mb-8">
-        <motion.a href="mailto:jaydentallen30@gmail.com" className="text-gray-300 hover:text-blue-500" whileHover={{ scale: 1.1 }}>
-          <FaEnvelope size={32} />
+      <div className="flex justify-center gap-6 mb-8 flex-wrap">
+        <motion.a
+          href="mailto:jaydentallen30@gmail.com"
+          className="text-gray-300 hover:text-blue-500"
+          whileHover={{ scale: 1.1 }}
+        >
+          <FaEnvelope size={28} />
         </motion.a>
-        <motion.a href="https://github.com/jtalented" className="text-gray-300 hover:text-purple-500" whileHover={{ scale: 1.1 }}>
-          <FaGithub size={32} />
+        <motion.a
+          href="https://github.com/jtalented"
+          className="text-gray-300 hover:text-purple-500"
+          whileHover={{ scale: 1.1 }}
+        >
+          <FaGithub size={28} />
         </motion.a>
-        <motion.a href="https://www.linkedin.com/in/jayden-allen-aa2083277/" className="text-gray-300 hover:text-blue-500" whileHover={{ scale: 1.1 }}>
-          <FaLinkedin size={32} />
+        <motion.a
+          href="https://www.linkedin.com/in/jayden-allen-aa2083277/"
+          className="text-gray-300 hover:text-blue-500"
+          whileHover={{ scale: 1.1 }}
+        >
+          <FaLinkedin size={28} />
         </motion.a>
       </div>
     </motion.section>

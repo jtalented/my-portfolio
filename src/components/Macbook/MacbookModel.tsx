@@ -13,12 +13,13 @@ interface Props {
   onRotationComplete: () => void;
   rotationStart: number | null;
   screenOn?: boolean;
+  isMobile?: boolean;
 }
 
 const MacbookModel = forwardRef<MacbookModelRef, Props>(
-  ({ zoomIn, onRotationComplete, rotationStart, screenOn }, ref) => {
+  ({ zoomIn, onRotationComplete, rotationStart, screenOn, isMobile = false }, ref) => {
     const modelRef = useRef<THREE.Group>(null);
-    const { scene } = useGLTF('/models/macbookprog.glb');
+    const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/macbookprog.glb`);
     const rotationProgress = useRef(0);
     const hasRotated = useRef(false);
     const { camera } = useThree();
@@ -32,7 +33,6 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       const yCutoff = -0.35;
 
       scene.traverse((child) => {
-        
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
 
@@ -45,24 +45,14 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
           if (keyCandidates.some((key) => mesh.name.toLowerCase().startsWith(key))) {
             mesh.material = (mesh.material as THREE.MeshStandardMaterial).clone();
             const mat = mesh.material as THREE.MeshStandardMaterial;
-          
 
-
-            //Dark gray with subtle blue tint
             mat.color = new THREE.Color('#1a1a2e');
             mat.roughness = 0.35;
             mat.metalness = 0.3;
-            //Optional soft blue ambient reflection
-            mat.emissive = new THREE.Color('#222244'); 
+            mat.emissive = new THREE.Color('#222244');
             mat.emissiveIntensity = 0.05;
-          
             mat.needsUpdate = true;
           }
-          
-
-          
-
-
 
           if (mesh.position.y < yCutoff) {
             mesh.visible = false;
@@ -79,8 +69,6 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       });
     }, [scene]);
 
-
-
     // Reset rotation when zooming out
     useEffect(() => {
       if (!zoomIn) {
@@ -92,7 +80,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     useFrame(() => {
       if (!modelRef.current) return;
 
-      //Check if the camera is in front of the screen
+      // Check if the camera is in front of the screen
       const screenNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(modelRef.current.quaternion);
       const cameraDirection = new THREE.Vector3().subVectors(
         camera.position,
@@ -101,7 +89,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       const dotProduct = screenNormal.dot(cameraDirection);
       setShowScreen(dotProduct > 0);
 
-      //Rotate into project view
+      // Rotate into project view
       if (zoomIn && rotationStart !== null && !hasRotated.current) {
         rotationProgress.current += 0.01;
         const t = Math.min(rotationProgress.current * 2, 1);
@@ -115,7 +103,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
         }
       }
 
-      //Auto-rotate when idle
+      // Auto-rotate when idle
       if (!zoomIn && !hasRotated.current) {
         modelRef.current.rotation.y += 0.002;
       }
@@ -129,8 +117,9 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
           <MacbookScreen
             position={[0, 1.45, -0.38]}
             rotation={[0.16, 0, 0]}
-            scale={[1.36, 1.46, 0.1]}
+            scale={isMobile ? [1.21, 1.3, 0.1] : [1.36, 1.46, 0.1]}
             screenOn={screenOn}
+            isMobile={isMobile}
           />
         )}
       </group>
@@ -139,4 +128,4 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
 );
 
 export default MacbookModel;
-useGLTF.preload('/models/macbookprog.glb');
+useGLTF.preload(`${import.meta.env.BASE_URL}models/macbookprog.glb`);

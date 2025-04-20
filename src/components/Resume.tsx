@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { theme } from '../styles/theme';
 
 const Resume = () => {
-  const pdfUrl = '/resumes/resumefrontend.pdf';
+  const pdfUrl = `${import.meta.env.BASE_URL}resumes/resumefrontend.pdf`;
 
   const containerVariants = {
     initial: { opacity: 0 },

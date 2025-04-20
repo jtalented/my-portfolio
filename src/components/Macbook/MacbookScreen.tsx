@@ -1,5 +1,5 @@
 import { Html } from '@react-three/drei';
-import { useState, useRef} from 'react';
+import { useState, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import HomeScreen from './HomeScreen';
 
@@ -8,19 +8,28 @@ interface MacbookScreenProps {
   rotation?: [number, number, number];
   scale?: [number, number, number];
   screenOn?: boolean;
+  isMobile?: boolean;
 }
 
 const MacbookScreen = ({
-  position = [0, 1.05, -0.105],
   rotation = [0.16, 0, 0],
-  scale = [1.36, 1.46, 0.1],
   screenOn = false,
+  isMobile = false,
 }: MacbookScreenProps) => {
   const [opacity, setOpacity] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const visibilityRef = useRef(false);
   const lastVisibleTime = useRef(0);
   const htmlRef = useRef<HTMLDivElement>(null);
+
+  // Adjustments for real mobile devices
+  const screenPosition: [number, number, number] = isMobile
+    ? [0, 1.475, -0.365] // mobile fix: a bit higher and forward
+    : [0, 1.45, -0.38];
+
+  const screenScale: [number, number, number] = isMobile
+    ? [1.18, 1.27, 0.1] // mobile fix: slightly smaller to fit screen
+    : [1.36, 1.46, 0.1];
 
   useFrame(({ clock }) => {
     if (htmlRef.current) {
@@ -47,18 +56,15 @@ const MacbookScreen = ({
     }
   });
 
-
-
-
   return (
     <>
       {/* Background screen with fade effect */}
       <Html
-        position={position}
+        position={screenPosition}
         rotation={rotation}
-        scale={scale}
+        scale={screenScale}
         transform
-        distanceFactor={1.2}
+        distanceFactor={isMobile ? 1.4 : 1.2}
         prepend
         occlude
         zIndexRange={[100, 0]}
@@ -76,7 +82,7 @@ const MacbookScreen = ({
           }}
         >
           <img
-            src="/images/macbook-screen.png"
+            src={`${import.meta.env.BASE_URL}images/macbook-screen.png`}
             alt="MacBook Screen"
             draggable={false}
             unselectable="on"
@@ -91,16 +97,14 @@ const MacbookScreen = ({
         </div>
       </Html>
 
-
-
       {/* App UI only if screen is on */}
       {screenOn && (
         <Html
-          position={position}
+          position={screenPosition}
           rotation={rotation}
-          scale={scale}
+          scale={screenScale}
           transform
-          distanceFactor={1.2}
+          distanceFactor={isMobile ? 1.4 : 1.2}
           prepend
           occlude
           zIndexRange={[1000, 101]}
