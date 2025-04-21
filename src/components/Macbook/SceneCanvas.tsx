@@ -28,8 +28,8 @@ const SceneCanvas = ({
       <Canvas
         camera={{
           position: isMobile ? [0, 1.6, 9] : [0, 1.6, 6],
-          fov: isMobile ? 30 : 26,
-        }}
+          fov: isMobile ? 32 : 26,
+        }}        
         gl={{ alpha: true }}
         style={{
           position: 'absolute',

@@ -17,7 +17,7 @@ interface Props {
 }
 
 const MacbookModel = forwardRef<MacbookModelRef, Props>(
-  ({ zoomIn, onRotationComplete, rotationStart, screenOn, isMobile = false }, ref) => {
+  ({ zoomIn, onRotationComplete, rotationStart, screenOn }, ref) => {
     const modelRef = useRef<THREE.Group>(null);
     const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/macbookprog.glb`);
     const rotationProgress = useRef(0);
@@ -69,7 +69,6 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       });
     }, [scene]);
 
-    // Reset rotation when zooming out
     useEffect(() => {
       if (!zoomIn) {
         hasRotated.current = false;
@@ -80,30 +79,25 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     useFrame(() => {
       if (!modelRef.current) return;
 
-      // Check if the camera is in front of the screen
       const screenNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(modelRef.current.quaternion);
       const cameraDirection = new THREE.Vector3().subVectors(
         camera.position,
-        new THREE.Vector3(0, 1.45, -0.38).applyMatrix4(modelRef.current.matrixWorld)
+        new THREE.Vector3(0, 1.45, -0.39).applyMatrix4(modelRef.current.matrixWorld)
       ).normalize();
       const dotProduct = screenNormal.dot(cameraDirection);
       setShowScreen(dotProduct > 0);
 
-      // Rotate into project view
       if (zoomIn && rotationStart !== null && !hasRotated.current) {
         rotationProgress.current += 0.01;
         const t = Math.min(rotationProgress.current * 2, 1);
         const target = 0;
-
         modelRef.current.rotation.y = THREE.MathUtils.lerp(rotationStart, target, t);
-
         if (t >= 1) {
           hasRotated.current = true;
           onRotationComplete();
         }
       }
 
-      // Auto-rotate when idle
       if (!zoomIn && !hasRotated.current) {
         modelRef.current.rotation.y += 0.002;
       }
@@ -114,13 +108,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
         <primitive object={scene} />
 
         {showScreen && (
-          <MacbookScreen
-            position={[0, 1.45, -0.38]}
-            rotation={[0.16, 0, 0]}
-            scale={isMobile ? [1.21, 1.3, 0.1] : [1.36, 1.46, 0.1]}
-            screenOn={screenOn}
-            isMobile={isMobile}
-          />
+          <MacbookScreen screenOn={screenOn} />
         )}
       </group>
     );
