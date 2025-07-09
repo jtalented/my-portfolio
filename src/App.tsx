@@ -24,6 +24,31 @@ const App = () => {
       {/* Floating MacBook that follows throughout the page */}
       {!isMobile && <FloatingMacBook />}
 
+      {/* Glass Break Transition Space */}
+      <motion.section 
+        id="glass-transition" 
+        className="relative z-10 min-h-screen flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        {/* Subtle background to indicate transition */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-800/60 to-slate-900" />
+        
+        {/* Optional visual indicator for the break */}
+        <motion.div
+          className="relative z-10 text-center opacity-30"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 0.3, scale: 1 }}
+          transition={{ duration: 2 }}
+          viewport={{ once: true }}
+        >
+          <div className="w-32 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent mx-auto mb-4" />
+          <p className="text-slate-400 text-sm font-mono">System Initialized</p>
+          <div className="w-32 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent mx-auto mt-4" />
+        </motion.div>
+      </motion.section>
+
       {/* Main Content with Professional Transitions */}
       <motion.section 
         id="main-content" 

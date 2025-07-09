@@ -323,11 +323,11 @@ const GlassShatterEffect = ({
     { clipPath: "polygon(92% 68%, 100% 72%, 100% 100%, 95% 100%)", centerX: 96, centerY: 85, size: 'small' }
   ], []);
 
-  // Timing for glass breaking - occurs early in hero section
-  const intactPhase = [0, 0.08];        // Intact through initial hero
-  const breakingPhase = [0.08, 0.10];   // Quick break in mid-hero
-  const shatterPhase = [0.10, 0.12];    // Fast shatter
-  const dispersePhase = [0.12, 0.14];   // Pieces disperse quickly, laptop ready for all sections   
+  // Timing for glass breaking - extended to take 8-10 scroll movements, starting immediately
+  const intactPhase = [0, 0.02];        // Minimal intact phase
+  const breakingPhase = [0.02, 0.12];   // Gradual break over 10% scroll range  
+  const shatterPhase = [0.12, 0.22];    // Extended shatter over 10% range
+  const dispersePhase = [0.22, 0.32];   // Slower disperse over 10% range, all glass gone by terminal section   
 
   // ALL useTransform calls OUTSIDE the map - no hooks in loops!
   const fragmentVisibility = useTransform(
@@ -561,46 +561,7 @@ const GlassShatterEffect = ({
           })}
         </motion.div>
 
-        {/* Premium Status Indicator */}
-        <motion.div
-          className="absolute top-6 left-6 text-white px-4 py-3 rounded-xl text-sm backdrop-blur-lg border"
-          style={{
-            opacity: useTransform(scrollProgress, [0, intactPhase[1], dispersePhase[1]], [1, 1, 0]),
-            background: `
-              linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.15) 0%, 
-                rgba(120, 180, 255, 0.08) 50%, 
-                rgba(255, 255, 255, 0.05) 100%
-              )
-            `,
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            boxShadow: `
-              0 8px 32px rgba(0, 0, 0, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4)
-            `,
-          }}
-        >
-          <div className="flex items-center space-x-2">
-            <motion.div
-              className="w-2 h-2 rounded-full"
-              style={{
-                background: 'linear-gradient(45deg, #60A5FA, #A78BFA)',
-                boxShadow: '0 0 8px rgba(96, 165, 250, 0.6)',
-              }}
-              animate={{ 
-                opacity: [0.6, 1, 0.6],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            <span className="font-medium bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              Liquid Glass Screen
-            </span>
-          </div>
-          <div className="text-xs opacity-80 mt-1 text-blue-100">
-            {tessellationPieces.length} premium glass fragments
-          </div>
-        </motion.div>
+
       </motion.div>
     </>
   );
@@ -614,34 +575,34 @@ const FloatingMacBook = () => {
   const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
   
-  // Adjusted timing to match early glass shatter effect  
+  // Adjusted timing - laptop appears early and grows/moves very quickly
   const macbookScale = useTransform(scrollYProgress, 
-    [0, 0.08, 0.14, 0.5, 1], 
-    [0.2, 0.3, 1.3, 1.5, 1.7]
+    [0, 0.05, 0.10, 0.15, 0.6, 1], 
+    [0.05, 0.1, 1.3, 1.2, 1.4, 1.6]
   );
   
-  // Enhanced opacity with "break out" effect
+  // Laptop appears early, grows very quickly
   const macbookOpacity = useTransform(scrollYProgress, 
-    [0, 0.08, 0.14, 0.95, 1], 
-    [0.2, 0.5, 1, 0.9, 0.8]
+    [0, 0.05, 0.10, 0.15, 0.95, 1], 
+    [0, 0.1, 0.8, 1, 0.9, 0.8]
   );
   
-  // Much more extreme side-to-side movement - positioned correctly early
+  // Much faster movement - rapid emergence
   const macbookX = useTransform(scrollYProgress, 
-    [0, 0.14, 0.25, 0.45, 0.6, 0.75, 0.9, 1], 
-    [0, 650, 650, 650, -650, -650, 650, 200]
+    [0, 0.10, 0.15, 0.5, 0.65, 0.8, 0.95, 1], 
+    [0, 0, 650, 650, -650, -650, 650, 200]
   );
   
-  // Enhanced vertical movement for break out effect - positioned early for all sections
+  // Much faster break out movement - rapid emergence
   const macbookY = useTransform(scrollYProgress, 
-    [0, 0.08, 0.14, 0.25, 0.5, 0.7, 0.9, 1], 
-    [250, 200, -40, -40, 60, -20, 80, 40]
+    [0, 0.05, 0.10, 0.15, 0.55, 0.75, 0.95, 1], 
+    [300, 250, 100, -40, 60, -20, 80, 40]
   );
 
-  // Z-depth for break out effect - starts behind glass, breaks through early
+  // Much faster Z-depth emergence - rapid break through
   const macbookZ = useTransform(scrollYProgress, 
-    [0, 0.08, 0.14], 
-    [-150, -50, 200]
+    [0, 0.05, 0.10, 0.15], 
+    [-200, -150, -50, 200]
   );
 
   // Smooth spring animations with more responsive settings

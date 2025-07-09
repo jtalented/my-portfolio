@@ -1,4 +1,4 @@
-import { motion, MotionValue } from 'framer-motion';
+import { motion, MotionValue, useTransform, useSpring } from 'framer-motion';
 import { useMemo } from 'react';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) => {
+
   // Generate organic blob paths - more subtle sizes
   const liquidShapes = useMemo(() => [
     {
@@ -46,7 +47,7 @@ const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) 
 
   return (
     <div className="absolute inset-0 z-5 overflow-hidden">
-      {liquidShapes.map((shape) => (
+            {liquidShapes.map((shape) => (
         <motion.div
           key={shape.id}
           className="absolute"
@@ -171,8 +172,8 @@ const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) 
               }}
             />
           </motion.div>
-        </motion.div>
-      ))}
+                  </motion.div>
+        ))}
 
       {/* Flowing gradient overlay */}
       <motion.div
