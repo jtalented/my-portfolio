@@ -5,7 +5,7 @@ const MobileProjectList = () => {
     <section id="projects" className="py-16 px-4 sm:px-6 max-w-4xl mx-auto text-center">
       <h2
         className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 leading-tight"
-        style={{ color: theme.colors.primary }}
+        style={{ color: theme.brand.primary }}
       >
         Projects
       </h2>

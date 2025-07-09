@@ -119,25 +119,10 @@ const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) 
                 </filter>
               </defs>
               
-              <motion.path
+              <path
                 d={shape.path}
                 fill={`url(#gradient-${shape.id})`}
                 filter={`url(#glow-${shape.id})`}
-                animate={{
-                  d: [
-                    shape.path,
-                    shape.path.replace(/C\d+,\d+/g, (match) => {
-                      const coords = match.slice(1).split(',');
-                      return `C${parseInt(coords[0]) + Math.sin(Date.now() / 1000) * 10},${parseInt(coords[1]) + Math.cos(Date.now() / 1000) * 8}`;
-                    }),
-                    shape.path,
-                  ],
-                }}
-                transition={{
-                  duration: 15 + shape.animationDelay,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
               />
             </svg>
 

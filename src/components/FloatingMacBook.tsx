@@ -5,6 +5,8 @@ import { Suspense } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import useIsMobile from '../hooks/useIsMobile';
+import LiquidGlassMorphism from './Macbook/LiquidGlassMorphism';
 
 // Professional MacBook Component with Dynamic Theming
 const ProfessionalMacBook = ({ 
@@ -263,10 +265,12 @@ const createTessellatedShape = (bounds: {minX: number, maxX: number, minY: numbe
 // Simplified Glass Shatter Effect - NO HOOKS IN LOOPS
 const GlassShatterEffect = ({ 
   scrollProgress, 
-  scrollVelocity 
+  scrollVelocity,
+  isMobile = false
 }: { 
   scrollProgress: any;
   scrollVelocity: any;
+  isMobile?: boolean;
 }) => {
   // REALISTIC TRIANGULAR GLASS SHARDS - Perfect tessellation with no gaps or overlaps
   const tessellationPieces = useMemo(() => [
@@ -323,11 +327,13 @@ const GlassShatterEffect = ({
     { clipPath: "polygon(92% 68%, 100% 72%, 100% 100%, 95% 100%)", centerX: 96, centerY: 85, size: 'small' }
   ], []);
 
-  // Timing for glass breaking - extended to take 8-10 scroll movements, starting immediately
-  const intactPhase = [0, 0.02];        // Minimal intact phase
-  const breakingPhase = [0.02, 0.12];   // Gradual break over 10% scroll range  
-  const shatterPhase = [0.12, 0.22];    // Extended shatter over 10% range
-  const dispersePhase = [0.22, 0.32];   // Slower disperse over 10% range, all glass gone by terminal section   
+  // Timing for glass breaking - much faster on mobile, extended on desktop
+  const intactPhase = isMobile ? [0, 0.005] : [0, 0.02];        // Much faster start on mobile
+  const breakingPhase = isMobile ? [0.005, 0.05] : [0.02, 0.12];   // Much faster break on mobile
+  const shatterPhase = isMobile ? [0.05, 0.10] : [0.12, 0.22];    // Much faster shatter on mobile
+  const dispersePhase = isMobile ? [0.10, 0.18] : [0.22, 0.32];   // Much faster disperse on mobile
+
+   
 
   // ALL useTransform calls OUTSIDE the map - no hooks in loops!
   const fragmentVisibility = useTransform(
@@ -378,7 +384,7 @@ const GlassShatterEffect = ({
               transparent 70%
             )
           `,
-          backdropFilter: 'blur(12px) saturate(1.6) brightness(1.05)',
+          backdropFilter: `blur(${isMobile ? 6 : 12}px) saturate(1.6) brightness(1.05)`,
           border: '1px solid rgba(255, 255, 255, 0.1)',
           boxShadow: `
             inset 0 1px 0 rgba(255, 255, 255, 0.4),
@@ -403,7 +409,7 @@ const GlassShatterEffect = ({
                 rgba(255, 255, 255, 0.05) 100%
               )
             `,
-            backdropFilter: 'blur(8px) saturate(1.4) brightness(1.03)',
+            backdropFilter: `blur(${isMobile ? 4 : 8}px) saturate(1.4) brightness(1.03)`,
             filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.03))',
           }}
         />
@@ -511,7 +517,7 @@ const GlassShatterEffect = ({
                         transparent 70%
                       )
                     `,
-                    backdropFilter: `blur(${piece.size === 'large' ? 14 : piece.size === 'medium' ? 12 : 10}px) saturate(1.6) brightness(1.08)`,
+                    backdropFilter: `blur(${isMobile ? (piece.size === 'large' ? 8 : piece.size === 'medium' ? 6 : 4) : (piece.size === 'large' ? 14 : piece.size === 'medium' ? 12 : 10)}px) saturate(1.6) brightness(1.08)`,
                     // NO BORDERS - creates seamless look
                     filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05))',
                   }}
@@ -571,32 +577,42 @@ const GlassShatterEffect = ({
 const FloatingMacBook = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
+  // Direct mobile detection - no state timing issues
+  const finalIsMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  
+
+  
+
 
   const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
   
-  // Adjusted timing - laptop appears early and grows/moves very quickly
+  // Start almost full size in middle section, grow slightly to break glass, then stay constant
   const macbookScale = useTransform(scrollYProgress, 
-    [0, 0.05, 0.10, 0.15, 0.6, 1], 
-    [0.05, 0.1, 1.3, 1.2, 1.4, 1.6]
+    [0, 0.08, 0.10, 0.15, 0.6, 1], 
+    [finalIsMobile ? 0.6 : 0.9, finalIsMobile ? 0.6 : 0.9, finalIsMobile ? 0.65 : 0.95, finalIsMobile ? 0.7 : 1.0, finalIsMobile ? 0.7 : 1.0, finalIsMobile ? 0.7 : 1.0]
   );
   
-  // Laptop appears early, grows very quickly
+  // Start visible in middle section, fade in gradually
   const macbookOpacity = useTransform(scrollYProgress, 
-    [0, 0.05, 0.10, 0.15, 0.95, 1], 
-    [0, 0.1, 0.8, 1, 0.9, 0.8]
+    [0, 0.08, 0.10, 0.15, 0.95, 1], 
+    [0.8, 0.8, 0.9, 1, 0.9, 0.8]
   );
   
-  // Much faster movement - rapid emergence
+  // Dynamic X movement - much more dramatic on mobile
   const macbookX = useTransform(scrollYProgress, 
-    [0, 0.10, 0.15, 0.5, 0.65, 0.8, 0.95, 1], 
-    [0, 0, 650, 650, -650, -650, 650, 200]
+    [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
+    finalIsMobile 
+      ? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  // No X movement on mobile
+      : [0, 0, 0.15, 0.15, -0.15, -0.15, 0.15, 0.15, -0.15, -0.15, 0.1, 0.1]  // Desktop movement
   );
   
-  // Much faster break out movement - rapid emergence
+  // Y movement - much more dramatic on mobile
   const macbookY = useTransform(scrollYProgress, 
-    [0, 0.05, 0.10, 0.15, 0.55, 0.75, 0.95, 1], 
-    [300, 250, 100, -40, 60, -20, 80, 40]
+    [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
+    finalIsMobile 
+      ? [0, 0, -50, -100, -150, -100, -50, 0, 50, 100, 150, 150]  // Much more dramatic Y movement on mobile
+      : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  // Desktop movement
   );
 
   // Much faster Z-depth emergence - rapid break through
@@ -615,7 +631,7 @@ const FloatingMacBook = () => {
 
   // Track current section
   useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((latest) => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
       const section = Math.floor(latest * 7); // 7 sections
       setCurrentSection(Math.min(section, 6));
     });
@@ -625,31 +641,46 @@ const FloatingMacBook = () => {
 
   return (
     <>
+
+
+      {/* Liquid Glass Morphism Effect */}
+      <LiquidGlassMorphism 
+        mousePosition={{ x: 0, y: 0 }}
+        scrollProgress={scrollYProgress}
+        opacity={useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 0.5, 0])}
+      />
+
       {/* Enhanced Glass Shatter Effect */}
       <GlassShatterEffect 
         scrollProgress={scrollYProgress} 
         scrollVelocity={scrollVelocity}
+        isMobile={finalIsMobile}
       />
 
-      <motion.div
-        ref={containerRef}
-        className="fixed top-0 left-0 w-full h-screen pointer-events-none z-30"
-        style={{
-          scale: smoothScale,
-          opacity: smoothOpacity,
-          x: smoothX,
-          y: smoothY,
-          z: smoothZ,
-        }}
-      >
+
+
+      {!finalIsMobile && (
+        <motion.div
+          ref={containerRef}
+          className="absolute w-full h-screen pointer-events-none z-30"
+          style={{
+            top: useTransform(scrollYProgress, [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], ['100vh', '100vh', '140vh', '200vh', '280vh', '380vh', '480vh', '580vh', '650vh', '720vh', '850vh', '850vh']),
+            scale: smoothScale,
+            opacity: smoothOpacity,
+            x: useTransform(smoothX, (x) => `${x * 100}vw`),
+            y: smoothY,
+            z: smoothZ,
+          }}
+        >
+
         {/* 3D MacBook with much larger canvas to prevent cutoff */}
         <div className="w-full h-full flex items-center justify-center">
           <Canvas
             camera={{ position: [0, 0, 4], fov: 70 }}
             gl={{ alpha: true, antialias: true }}
             style={{
-              width: '900px',
-              height: '700px',
+              width: finalIsMobile ? 'min(400px, 80vw)' : 'min(1200px, 90vw)',
+              height: finalIsMobile ? 'min(300px, 60vw)' : 'min(900px, 67.5vw)',
               pointerEvents: 'none',
             }}
           >
@@ -697,7 +728,8 @@ const FloatingMacBook = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/12 via-purple-500/12 to-cyan-500/12 rounded-full blur-3xl" />
         </motion.div>
-      </motion.div>
+        </motion.div>
+      )}
     </>
   );
 };

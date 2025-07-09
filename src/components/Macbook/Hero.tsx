@@ -9,6 +9,7 @@ const Hero = () => {
   const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
+    layoutEffect: false,
     target: heroRef,
     offset: ["start start", "end start"]
   });
