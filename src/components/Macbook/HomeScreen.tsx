@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import useResponsive from '../../hooks/useResponsive';
 
 interface AppState {
   id: string;
@@ -21,73 +22,33 @@ interface AppState {
 
 const apps: AppState[] = [
   {
-    id: 'march',
-    name: 'March Madness',
-    icon: `${import.meta.env.BASE_URL}icons/march.svg`,
-    color: 'bg-blue-500/20',
+    id: 'portfolio',
+    name: 'Portfolio',
+    icon: '💼',
+    color: 'bg-gradient-to-br from-blue-500 to-blue-600',
     htmlContent: `
-      <div class="flex-1 p-6 overflow-auto text-sm text-gray-700 font-sans">
-        <h2 class="text-xl font-bold mb-2 text-blue-700">March Madness Prediction Web App</h2>
-        <p class="mb-4 text-gray-800">
-          A data-driven NCAA bracket prediction tool built with modern web technologies and custom machine learning.
-        </p>
-        
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">🔧 Tech Stack</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li><strong>Frontend:</strong> React.js (TypeScript)</li>
-            <li><strong>Backend:</strong> Flask API with Python</li>
-            <li><strong>ML Model:</strong> Trained on historical March Madness data (Kaggle)</li>
-          </ul>
+      <div class="portfolio-content p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Interactive 3D Portfolio</h2>
+        <p class="text-gray-600 mb-4">A modern portfolio website featuring interactive 3D elements, smooth animations, and responsive design.</p>
+        <div class="tech-stack mb-4">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Tech Stack:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">React</span>
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">TypeScript</span>
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Three.js</span>
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Tailwind</span>
+          </div>
         </div>
-
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">📊 Features</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Machine learning-based tournament prediction</li>
-            <li>API endpoints for serving bracket logic</li>
-            <li>Interactive bracket builder UI</li>
+        <div class="features">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Features:</h3>
+          <ul class="text-gray-600 text-sm space-y-1">
+            <li>• Interactive 3D MacBook model</li>
+            <li>• Smooth scroll animations</li>
+            <li>• Responsive design</li>
+            <li>• Glass morphism effects</li>
           </ul>
-        </div>
-
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">🛠️ Future Plans</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Visualize predictions with confidence levels</li>
-            <li>Enable user-specific predictions and saving</li>
-            <li>Deploy model with scalable cloud infrastructure</li>
-          </ul>
-        </div>
-
-        <!-- GitHub button -->
-        <div class="pt-4">
-          <a
-            href="https://github.com/jtalented"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-block bg-gray-900 text-white text-xs px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-md"
-          >
-            🔗 View on GitHub
-          </a>
         </div>
       </div>
-    `,
-    customStyles: `
-      /* Custom styles for March Madness app */
-      .custom-bracket-container {
-        background: linear-gradient(to right, #f0f4ff, #e6efff);
-        border-radius: 8px;
-      }
-      
-      .team-highlight {
-        animation: pulse 2s infinite;
-      }
-      
-      @keyframes pulse {
-        0% { background-color: rgba(59, 130, 246, 0.1); }
-        50% { background-color: rgba(59, 130, 246, 0.3); }
-        100% { background-color: rgba(59, 130, 246, 0.1); }
-      }
     `,
     layout: {
       top: '0px',
@@ -97,72 +58,129 @@ const apps: AppState[] = [
     },
   },
   {
-    id: 'video',
-    name: 'Automated Video Compiler',
-    icon: '📹',
-    color: 'bg-blue-300/30',
+    id: 'task-manager',
+    name: 'Task Manager',
+    icon: '📋',
+    color: 'bg-gradient-to-br from-green-500 to-green-600',
     htmlContent: `
-      <div class="flex-1 p-6 overflow-auto text-sm text-gray-700 font-sans">
-        <h2 class="text-xl font-bold mb-2 text-indigo-700">Automated Video Compiler</h2>
-        <p class="mb-4 text-gray-800">
-          A Python-powered pipeline that compiles daily trending video segments using social media APIs, editing libraries, and automation tools.
-        </p>
-        
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">🛠 Technologies Used</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Python for scripting the pipeline logic</li>
-            <li>FFmpeg for stitching and trimming videos</li>
-            <li>Pytube and Instagram Graph API for media extraction</li>
+      <div class="task-manager-content p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Enterprise Task Management</h2>
+        <p class="text-gray-600 mb-4">A comprehensive task management platform with real-time collaboration and advanced analytics.</p>
+        <div class="features mb-4">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Key Features:</h3>
+          <ul class="text-gray-600 text-sm space-y-1">
+            <li>• Real-time collaboration</li>
+            <li>• Advanced analytics</li>
+            <li>• Drag-and-drop functionality</li>
+            <li>• Team workspace features</li>
           </ul>
         </div>
-
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">💡 Features</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Daily fetch and compile of trending video clips</li>
-            <li>Overlay of intros/outros, transitions, and captions</li>
-            <li>End-to-end automation: trigger, edit, export</li>
-          </ul>
-        </div>
-
-        <div class="mb-4">
-          <h3 class="font-semibold text-md text-gray-800 mb-1">📈 Use Case</h3>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Batch-creates video compilations for platforms like TikTok, Instagram Reels, and YouTube Shorts</li>
-            <li>Streamlines content curation for daily publishing</li>
-          </ul>
-        </div>
-
-        <!-- GitHub button -->
-        <div class="pt-4">
-          <a
-            href="https://github.com/jtalented"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-block bg-gray-900 text-white text-xs px-4 py-2 rounded-full hover:bg-gray-800 transition-all shadow-md"
-          >
-            🔗 View on GitHub
-          </a>
+        <div class="tech-stack">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Tech Stack:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">React</span>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Node.js</span>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Express</span>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">MongoDB</span>
+          </div>
         </div>
       </div>
     `,
+    layout: {
+      top: '0px',
+      left: '117px',
+      right: '128px',
+      bottom: '0px',
+    },
+  },
+  {
+    id: 'ecommerce-api',
+    name: 'E-Commerce API',
+    icon: '🛒',
+    color: 'bg-gradient-to-br from-purple-500 to-purple-600',
+    htmlContent: `
+      <div class="ecommerce-content p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Scalable E-Commerce API</h2>
+        <p class="text-gray-600 mb-4">High-performance RESTful API for e-commerce platforms with advanced authentication and payment processing.</p>
+        <div class="features mb-4">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Features:</h3>
+          <ul class="text-gray-600 text-sm space-y-1">
+            <li>• Advanced authentication</li>
+            <li>• Payment processing</li>
+            <li>• Inventory management</li>
+            <li>• High-performance design</li>
+          </ul>
+        </div>
+        <div class="tech-stack">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Tech Stack:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Node.js</span>
+            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Express</span>
+            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">MongoDB</span>
+            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">TypeScript</span>
+          </div>
+        </div>
+      </div>
+    `,
+    layout: {
+      top: '0px',
+      left: '117px',
+      right: '128px',
+      bottom: '0px',
+    },
+  },
+  {
+    id: 'analytics',
+    name: 'Analytics',
+    icon: '📊',
+    color: 'bg-gradient-to-br from-red-500 to-red-600',
+    htmlContent: `
+      <div class="analytics-content p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Analytics Dashboard</h2>
+        <p class="text-gray-600 mb-4">Real-time data visualization and analytics platform with interactive charts and reporting.</p>
+        <div class="features mb-4">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Features:</h3>
+          <ul class="text-gray-600 text-sm space-y-1">
+            <li>• Real-time data visualization</li>
+            <li>• Interactive charts</li>
+            <li>• Custom reporting</li>
+            <li>• Data export capabilities</li>
+          </ul>
+        </div>
+        <div class="tech-stack">
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Tech Stack:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">React</span>
+            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">D3.js</span>
+            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">Node.js</span>
+            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+    `,
+    layout: {
+      top: '0px',
+      left: '117px',
+      right: '128px',
+      bottom: '0px',
+    },
+  },
+  {
+    id: 'video-editor',
+    name: 'Video Editor',
+    icon: '🎬',
+    color: 'bg-gradient-to-br from-orange-500 to-orange-600',
     customStyles: `
-    /* Custom styles for Automated Video Compiler app */
-    .bg-gradient-video {
-      background: linear-gradient(to right, #f8fafc, #e2e8f0);
-    }
-  
     .video-section {
-      background-color: white;
-      border-radius: 10px;
       padding: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      border-radius: 0.5rem;
       margin-bottom: 1rem;
     }
   
     .video-section h3 {
-      color: #1e293b;
+      color: white;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
@@ -170,7 +188,7 @@ const apps: AppState[] = [
     .video-section ul {
       padding-left: 1.25rem;
       list-style-type: disc;
-      color: #334155;
+      color: #fef3c7;
     }
   
     .video-section ul li {
@@ -195,19 +213,17 @@ const apps: AppState[] = [
   `,
     layout: {
       top: '0px',
-      left: '117px',
-      right: '128px',
+      left: 'responsive',
+      right: 'responsive',
       bottom: '0px',
     },
   }
 ];
 
-
-
-
 const HomeScreen = () => {
   const [activeApp, setActiveApp] = useState<AppState | null>(null);
   const [anchorPos, setAnchorPos] = useState<DOMRect | null>(null);
+  const responsive = useResponsive();
 
   useEffect(() => {
     const anchor = document.getElementById('macbook-app-anchor');
@@ -216,8 +232,6 @@ const HomeScreen = () => {
       setAnchorPos(rect);
     }
   }, [activeApp]);
-
-
 
   // Function to create unique style ID for each app
   const getStyleId = (appId: string) => `app-style-${appId}`;
@@ -230,9 +244,6 @@ const HomeScreen = () => {
       existingStyle.remove();
     }
 
-
-
-
     // Create new style element
     if (cssString) {
       const styleElement = document.createElement('style');
@@ -241,9 +252,6 @@ const HomeScreen = () => {
       document.head.appendChild(styleElement);
     }
   };
-
-
-
 
   // Inject styles when app becomes active
   useEffect(() => {
@@ -264,19 +272,25 @@ const HomeScreen = () => {
 
   if (activeApp && anchorPos) {
     const layout = activeApp.layout ?? {};
+    
+    // Calculate responsive layout values
+    const basePadding = responsive.isMobile ? 60 : responsive.isTablet ? 80 : 117;
+    const sidePadding = responsive.isMobile ? 40 : responsive.isTablet ? 60 : 128;
+    const defaultWidth = responsive.screenDimensions.uiWidth;
+    const defaultHeight = responsive.screenDimensions.uiHeight;
 
     const style: React.CSSProperties = {
       position: 'absolute',
       top: `${anchorPos.top + parseInt(layout.top ?? '0')}px`,
-      left: `${anchorPos.left + parseInt(layout.left ?? '0')}px`,
+      left: `${anchorPos.left + parseInt(layout.left ?? basePadding.toString())}px`,
       width:
         layout.left !== undefined && layout.right !== undefined
           ? `${anchorPos.width - parseInt(layout.left) - parseInt(layout.right)}px`
-          : layout.width ?? '900px',
+          : layout.width ?? `${defaultWidth}px`,
       height:
         layout.top !== undefined && layout.bottom !== undefined
           ? `calc(100vh - ${layout.top} - ${layout.bottom})`
-          : layout.height ?? '560px',
+          : layout.height ?? `${defaultHeight}px`,
       zIndex: 999,
     };
 
@@ -314,9 +328,6 @@ const HomeScreen = () => {
       document.body
     );
   }
-
-
-
 
   return (
     <div className="w-full h-full px-6 pb-6 pt-16 select-none flex flex-col gap-6">

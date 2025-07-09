@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import useResponsive from '../hooks/useResponsive';
 
 const TerminalIntro = () => {
   const sentences = [
@@ -17,6 +18,8 @@ const TerminalIntro = () => {
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
   const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
+
+  const responsive = useResponsive();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -88,13 +91,13 @@ const TerminalIntro = () => {
       </div>
 
       {/* Grid pattern overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      <div className="absolute inset-0" style={{ backgroundSize: responsive.isMobile ? '30px 30px' : responsive.isTablet ? '40px 40px' : '50px 50px' }}></div>
 
       {/* Flex container for left alignment on desktop */}
       <div className="flex w-full h-full items-center justify-center md:justify-start">
         <motion.div 
-          className="text-center z-10 px-6 max-w-5xl mx-auto md:mx-0 md:text-left md:ml-[8vw]"
-          style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+          className="text-center z-10 px-6 max-w-5xl mx-auto md:mx-0 md:text-left"
+          style={{ rotateX, rotateY, transformStyle: 'preserve-3d', marginLeft: responsive.isMobile ? 0 : responsive.isTablet ? '4vw' : '8vw' }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}

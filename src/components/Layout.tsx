@@ -6,7 +6,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans leading-relaxed">
+    <div className="relative min-h-screen bg-slate-900 text-slate-100 font-sans leading-relaxed">
       {/* Subtle background pattern */}
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(148,163,184,0.1)_1px,transparent_0)] bg-[length:20px_20px] pointer-events-none"></div>
       

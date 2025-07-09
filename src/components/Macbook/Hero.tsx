@@ -1,17 +1,15 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useTransform, useScroll, useSpring } from 'framer-motion';
 import LiquidGlassMorphism from './LiquidGlassMorphism';
-import useIsMobile from '../../hooks/useIsMobile';
+import useResponsive from '../../hooks/useResponsive';
 
 const Hero = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
+  const responsive = useResponsive();
 
   const { scrollYProgress } = useScroll({
     layoutEffect: false,
-    target: heroRef,
-    offset: ["start start", "end start"]
   });
 
   // Professional scroll-based animations
@@ -30,7 +28,7 @@ const Hero = () => {
   // Mouse tracking for interactive effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isMobile && heroRef.current) {
+      if (!responsive.isMobile && heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect();
         setMousePosition({
           x: (e.clientX - rect.left - rect.width / 2) / rect.width,
@@ -41,17 +39,38 @@ const Hero = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isMobile]);
+  }, [responsive.isMobile]);
 
   const scrollToMainContent = () => {
     const target = document.getElementById('main-content');
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      const targetPosition = target.offsetTop;
+      const startPosition = window.pageYOffset;
+      const distance = targetPosition - startPosition;
+      const duration = 3000; // 3 seconds for slower scroll
+      let start: number | null = null;
+
+      const animation = (currentTime: number) => {
+        if (start === null) start = currentTime;
+        const timeElapsed = currentTime - start;
+        const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) requestAnimationFrame(animation);
+      };
+
+      const easeInOutCubic = (t: number, b: number, c: number, d: number) => {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t * t + b;
+        t -= 2;
+        return c / 2 * (t * t * t + 2) + b;
+      };
+
+      requestAnimationFrame(animation);
     }
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/50 to-slate-900"
@@ -200,109 +219,57 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Tech stack grid */}
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+        {/* Call to action */}
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 2 }}
         >
-          {[
-            { tech: 'React', years: '3+', icon: '⚛️', color: 'from-cyan-400 to-blue-500' },
-            { tech: 'TypeScript', years: '2+', icon: '📘', color: 'from-blue-400 to-indigo-500' },
-            { tech: 'Node.js', years: '3+', icon: '🟢', color: 'from-green-400 to-emerald-500' },
-            { tech: 'Cloud', years: '2+', icon: '☁️', color: 'from-purple-400 to-pink-500' }
-          ].map((item, index) => (
-            <motion.div
-              key={item.tech}
-              className="group relative p-4 backdrop-blur-md rounded-xl border border-white/10 hover:border-blue-400/50 transition-all duration-500"
-              initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
-              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-              transition={{ duration: 0.8, delay: 2.5 + index * 0.1 }}
-              whileHover={{ 
-                scale: 1.05, 
-                rotateY: 5,
-                transition: { duration: 0.3 }
-              }}
-            >
-              {/* Tech glow background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-10 rounded-xl group-hover:opacity-20 transition-opacity duration-500`} />
-              
-              {/* Circuit pattern */}
-              <div className="absolute top-2 right-2 w-4 h-4 border border-blue-400/30 rounded-sm">
-                <div className="absolute inset-1 border border-blue-400/20 rounded-sm" />
-              </div>
-              
-              <div className="relative z-10">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <div className="text-sm font-bold text-slate-200 mb-1">{item.tech}</div>
-                <div className="text-xs text-slate-400">{item.years} years</div>
-              </div>
-
-              {/* Hover circuit animation */}
-              <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                initial={false}
-                animate={{
-                  background: [
-                    'linear-gradient(0deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)',
-                    'linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)',
-                    'linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)',
-                    'linear-gradient(270deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)',
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Modern scroll indicator */}
-        <motion.div
-          className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 3.5, duration: 1 }}
-          style={{
-            opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]),
-          }}
-        >
           <motion.button
             onClick={scrollToMainContent}
-            className="group relative p-4 backdrop-blur-md rounded-2xl border border-blue-500/30 hover:border-blue-400/60 transition-all duration-300"
-            whileHover={{ scale: 1.05 }}
+            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25 backdrop-blur-sm border border-blue-500/20"
+            whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
-            {/* Tech frame */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 via-transparent to-cyan-500/10" />
-            
-            <motion.div
-              className="w-6 h-10 border-2 border-blue-400 rounded-full relative overflow-hidden"
-              whileHover={{ borderColor: '#60a5fa' }}
-            >
-              <motion.div
-                className="w-1 h-3 bg-blue-400 rounded-full absolute left-1/2 top-2 transform -translate-x-1/2"
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </motion.div>
-            
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
-              EXPLORE
-            </div>
+            Explore My Work
           </motion.button>
+          
+          <motion.a
+            href="#contact"
+            className="px-8 py-4 bg-gray-800/60 hover:bg-gray-700/60 text-white font-semibold rounded-lg transition-all duration-300 border-2 border-gray-600/50 hover:border-gray-500/50 backdrop-blur-sm"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Get In Touch
+          </motion.a>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 2.5 }}
+        >
+          <motion.div
+            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <motion.div
+              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Ambient tech lighting */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      
-      {/* Corner tech accents */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-blue-400/30" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-blue-400/30" />
-      <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-blue-400/30" />
-      <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-blue-400/30" />
+      {/* Ambient lighting effects */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }} />
     </section>
   );
 };

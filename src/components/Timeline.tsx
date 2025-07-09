@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import useResponsive from '../hooks/useResponsive';
 
 const timelineData = [
   {
@@ -63,6 +64,7 @@ const cardVariants: Variants = {
 const Timeline = () => {
   const [index, setIndex] = useState(0);
   const event = timelineData[index];
+  const responsive = useResponsive();
 
   const handlePrev = () => {
     setIndex((prev) => (prev === 0 ? timelineData.length - 1 : prev - 1));
@@ -143,7 +145,7 @@ const Timeline = () => {
         </div>
 
         {/* Current Event Card */}
-        <div className="relative min-h-[300px] mb-8 flex items-center justify-center">
+        <div className="relative" style={{ minHeight: responsive.isMobile ? 180 : responsive.isTablet ? 240 : 300 }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={index}

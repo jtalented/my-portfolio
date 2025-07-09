@@ -6,6 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import useIsMobile from '../hooks/useIsMobile';
+import useResponsive from '../hooks/useResponsive';
 import LiquidGlassMorphism from './Macbook/LiquidGlassMorphism';
 
 // Professional MacBook Component with Dynamic Theming
@@ -19,6 +20,7 @@ const ProfessionalMacBook = ({
   const modelRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/macbookprog.glb`);
   const { camera } = useThree();
+  const responsive = useResponsive();
 
   // Section-based themes
   const sectionThemes = [
@@ -112,7 +114,7 @@ const ProfessionalMacBook = ({
   });
 
   return (
-    <group ref={modelRef} scale={0.8} position={[0, -0.5, 0]} rotation={[0, Math.PI, 0]}>
+    <group ref={modelRef} scale={responsive.macbookScale} position={[0, responsive.macbookPosition.y, 0]} rotation={[0, Math.PI, 0]}>
       <primitive object={scene} />
       
       {/* Enhanced dynamic lighting */}
@@ -136,6 +138,9 @@ const ProfessionalMacBook = ({
 
 // Unified Glass Overlay Component
 const UnifiedGlassOverlay = ({ scrollProgress }: { scrollProgress: any }) => {
+  const responsive = useResponsive();
+  const { effectCounts, blurSettings } = responsive;
+
   return (
     <motion.div
       className="fixed inset-0 z-15 pointer-events-none"
@@ -161,7 +166,7 @@ const UnifiedGlassOverlay = ({ scrollProgress }: { scrollProgress: any }) => {
       />
 
       {/* Glass reflection highlights */}
-      {[...Array(6)].map((_, i) => (
+      {[...Array(effectCounts.reflectionLines)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
@@ -185,7 +190,7 @@ const UnifiedGlassOverlay = ({ scrollProgress }: { scrollProgress: any }) => {
       ))}
 
       {/* Floating glass particles */}
-      {[...Array(12)].map((_, i) => (
+      {[...Array(effectCounts.glassParticles)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-white/50 rounded-full"
@@ -260,13 +265,14 @@ const createTessellatedShape = (bounds: {minX: number, maxX: number, minY: numbe
 // Simplified Glass Shatter Effect - NO HOOKS IN LOOPS
 const GlassShatterEffect = ({ 
   scrollProgress, 
-  scrollVelocity,
-  isMobile = false
+  scrollVelocity
 }: { 
   scrollProgress: any;
   scrollVelocity: any;
-  isMobile?: boolean;
 }) => {
+  const responsive = useResponsive();
+  const { animationTiming, effectCounts, blurSettings } = responsive;
+
   // REALISTIC TRIANGULAR GLASS SHARDS - Perfect tessellation with no gaps or overlaps
   const tessellationPieces = useMemo(() => [
     // Top edge triangular shards - varying sizes
@@ -322,42 +328,34 @@ const GlassShatterEffect = ({
     { clipPath: "polygon(92% 68%, 100% 72%, 100% 100%, 95% 100%)", centerX: 96, centerY: 85, size: 'small' }
   ], []);
 
-  // Timing for glass breaking - much faster on mobile, extended on desktop
-  const intactPhase = isMobile ? [0, 0.005] : [0, 0.02];        // Much faster start on mobile
-  const breakingPhase = isMobile ? [0.005, 0.05] : [0.02, 0.12];   // Much faster break on mobile
-  const shatterPhase = isMobile ? [0.05, 0.10] : [0.12, 0.22];    // Much faster shatter on mobile
-  const dispersePhase = isMobile ? [0.10, 0.18] : [0.22, 0.32];   // Much faster disperse on mobile
-
-   
-
   // ALL useTransform calls OUTSIDE the map - no hooks in loops!
   const fragmentVisibility = useTransform(
     scrollProgress,
-    [0, breakingPhase[0], breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+    [0, animationTiming.glassBreakStart, animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
     [0.7, 0.7, 0.9, 0.9, 0]
   );
 
   const separationProgress = useTransform(
     scrollProgress,
-    [breakingPhase[0], breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+    [animationTiming.glassBreakStart, animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
     [0, 0, 1, 1]
   );
 
   const largeFragmentScale = useTransform(
     scrollProgress,
-    [breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
     [1, 1.08, 0.3]
   );
 
   const mediumFragmentScale = useTransform(
     scrollProgress,
-    [breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
     [1, 1.06, 0.2]
   );
 
   const smallFragmentScale = useTransform(
     scrollProgress,
-    [breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
     [1, 1.04, 0.1]
   );
 
@@ -367,7 +365,7 @@ const GlassShatterEffect = ({
       <motion.div
         className="fixed inset-0 z-14 pointer-events-none"
         style={{
-          opacity: useTransform(scrollProgress, [0, shatterPhase[0], dispersePhase[1], 1], [0, 0, 0.4, 0.4]),
+          opacity: useTransform(scrollProgress, [0, animationTiming.glassShatterStart, animationTiming.glassDisperseEnd, 1], [0, 0, 0.4, 0.4]),
           background: `
             linear-gradient(135deg, 
               rgba(255, 255, 255, 0.12) 0%, 
@@ -379,7 +377,7 @@ const GlassShatterEffect = ({
               transparent 70%
             )
           `,
-          backdropFilter: `blur(${isMobile ? 6 : 12}px) saturate(1.6) brightness(1.05)`,
+          backdropFilter: `blur(${blurSettings.backgroundBlur}px) saturate(1.6) brightness(1.05)`,
           border: '1px solid rgba(255, 255, 255, 0.1)',
           boxShadow: `
             inset 0 1px 0 rgba(255, 255, 255, 0.4),
@@ -396,7 +394,7 @@ const GlassShatterEffect = ({
         <motion.div
           className="absolute inset-0"
           style={{
-            opacity: useTransform(scrollProgress, [0, breakingPhase[0], breakingPhase[1]], [0.8, 0.8, 0]),
+            opacity: useTransform(scrollProgress, [0, animationTiming.glassBreakStart, animationTiming.glassBreakEnd], [0.8, 0.8, 0]),
             background: `
               linear-gradient(135deg, 
                 rgba(255, 255, 255, 0.08) 0%, 
@@ -404,7 +402,7 @@ const GlassShatterEffect = ({
                 rgba(255, 255, 255, 0.05) 100%
               )
             `,
-            backdropFilter: `blur(${isMobile ? 4 : 8}px) saturate(1.4) brightness(1.03)`,
+            backdropFilter: `blur(${blurSettings.glassBlur}px) saturate(1.4) brightness(1.03)`,
             filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.03))',
           }}
         />
@@ -459,37 +457,37 @@ const GlassShatterEffect = ({
                 style={{
                   opacity: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[0], breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+                    [0, animationTiming.glassBreakStart, animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
                     [0.8, 0.8, 1, 0.6, 0] // Fade as they fly off screen
                   ),
                   scale: useTransform(
                     scrollProgress,
-                    [breakingPhase[1], shatterPhase[1], dispersePhase[1]],
+                    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
                     [1, 1.1, piece.size === 'large' ? 0.4 : piece.size === 'medium' ? 0.3 : 0.2]
                   ),
                   x: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[1], dispersePhase[1]],
+                    [0, animationTiming.glassBreakEnd, animationTiming.glassDisperseEnd],
                     [0, 0, explosionX] // Fly way off screen
                   ),
                   y: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[1], dispersePhase[1]], 
+                    [0, animationTiming.glassBreakEnd, animationTiming.glassDisperseEnd], 
                     [0, 0, explosionY + (explosiveForce * 200)] // Fly way off screen with gravity
                   ),
                   rotateX: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[1], dispersePhase[1]],
+                    [0, animationTiming.glassBreakEnd, animationTiming.glassDisperseEnd],
                     [0, 0, rotDirX * rotSpeedX] // UNIQUE X rotation per piece
                   ),
                   rotateY: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[1], dispersePhase[1]],
+                    [0, animationTiming.glassBreakEnd, animationTiming.glassDisperseEnd],
                     [0, 0, rotDirY * rotSpeedY] // UNIQUE Y rotation per piece  
                   ),
                   rotateZ: useTransform(
                     scrollProgress,
-                    [0, breakingPhase[1], dispersePhase[1]],
+                    [0, animationTiming.glassBreakEnd, animationTiming.glassDisperseEnd],
                     [0, 0, rotDirZ * rotSpeedZ] // UNIQUE Z rotation per piece
                   ),
                 }}
@@ -512,7 +510,7 @@ const GlassShatterEffect = ({
                         transparent 70%
                       )
                     `,
-                    backdropFilter: `blur(${isMobile ? (piece.size === 'large' ? 8 : piece.size === 'medium' ? 6 : 4) : (piece.size === 'large' ? 14 : piece.size === 'medium' ? 12 : 10)}px) saturate(1.6) brightness(1.08)`,
+                    backdropFilter: `blur(${piece.size === 'large' ? blurSettings.glassBlur + 2 : piece.size === 'medium' ? blurSettings.glassBlur : blurSettings.glassBlur - 2}px) saturate(1.6) brightness(1.08)`,
                     // NO BORDERS - creates seamless look
                     filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05))',
                   }}
@@ -551,7 +549,7 @@ const GlassShatterEffect = ({
                       filter: 'blur(3px)',
                       opacity: useTransform(
                         scrollProgress,
-                        [0, breakingPhase[1], shatterPhase[0]],
+                        [0, animationTiming.glassBreakEnd, animationTiming.glassShatterStart],
                         [0, 0, 1]
                       ),
                     }}
@@ -561,8 +559,6 @@ const GlassShatterEffect = ({
             );
           })}
         </motion.div>
-
-
       </motion.div>
     </>
   );
@@ -571,15 +567,17 @@ const GlassShatterEffect = ({
 // Add a responsive width check
 function useShouldShowMacbook() {
   const [shouldShow, setShouldShow] = useState(true);
+  const responsive = useResponsive();
+  
   useEffect(() => {
     function handleResize() {
       // Hide MacBook if screen is less than 1024px (lg breakpoint)
-      setShouldShow(window.innerWidth >= 1024);
+      setShouldShow(responsive.viewportWidth >= 1024);
     }
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [responsive.viewportWidth]);
   return shouldShow;
 }
 
@@ -588,6 +586,7 @@ const FloatingMacBook = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
   const isMobile = useIsMobile();
+  const responsive = useResponsive();
   const shouldShowMacbook = useShouldShowMacbook();
   const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
@@ -654,7 +653,6 @@ const FloatingMacBook = () => {
       <GlassShatterEffect 
         scrollProgress={scrollYProgress} 
         scrollVelocity={scrollVelocity}
-        isMobile={isMobile}
       />
 
       {showMacbook && (
@@ -673,11 +671,11 @@ const FloatingMacBook = () => {
           {/* 3D MacBook with much larger canvas to prevent cutoff */}
           <div className="w-full h-full flex items-center justify-center">
             <Canvas
-              camera={{ position: [0, 0, 4], fov: 70 }}
+              camera={{ position: responsive.canvasSettings.cameraPosition, fov: responsive.canvasSettings.cameraFov }}
               gl={{ alpha: true, antialias: true }}
               style={{
-                width: isMobile ? 'min(400px, 80vw)' : 'min(1200px, 90vw)',
-                height: isMobile ? 'min(300px, 60vw)' : 'min(900px, 67.5vw)',
+                width: responsive.canvasSettings.canvasWidth,
+                height: responsive.canvasSettings.canvasHeight,
                 pointerEvents: 'none',
               }}
             >
@@ -695,7 +693,7 @@ const FloatingMacBook = () => {
 
           {/* Enhanced floating particles that respond to break out */}
           <div className="absolute inset-0 pointer-events-none">
-            {[...Array(15)].map((_, i) => (
+            {[...Array(responsive.effectCounts.floatingParticles)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-2 h-2 rounded-full"

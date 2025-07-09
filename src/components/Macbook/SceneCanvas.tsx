@@ -6,6 +6,7 @@ import MacbookModel, { MacbookModelRef } from './MacbookModel';
 import CameraController from './CameraController';
 import { MotionValue } from 'framer-motion';
 import * as THREE from 'three';
+import useResponsive from '../../hooks/useResponsive';
 
 interface Props {
   zoomIn: boolean;
@@ -38,12 +39,15 @@ const SceneCanvas = ({
   currentSection,
   backgroundMode = false,
 }: Props) => {
+  const responsive = useResponsive();
+  const { canvasSettings } = responsive;
+
   return (
     <div id="macbook-app-anchor" className="relative w-full">
       <Canvas
         camera={{
-          position: isMobile ? [0, 1.6, 8] : backgroundMode ? [0, 1.6, 4] : [0, 1.6, 6],
-          fov: isMobile ? 30 : backgroundMode ? 35 : 26,
+          position: canvasSettings.cameraPosition,
+          fov: canvasSettings.cameraFov,
         }}        
         gl={{ 
           alpha: true,
@@ -126,21 +130,21 @@ const SceneCanvas = ({
           {/* No OrbitControls - remove all user interaction */}
 
           {/* Subtle post-processing */}
-          <EffectComposer multisampling={4}>
-            <Bloom
-              intensity={backgroundMode ? 0.4 : 0.6}
-              kernelSize={2}
-              luminanceThreshold={0.4}
-              luminanceSmoothing={0.2}
+          <EffectComposer>
+            <Bloom 
+              intensity={backgroundMode ? 0.3 : 0.5} 
+              luminanceThreshold={0.8}
+              luminanceSmoothing={0.9}
             />
-            <DepthOfField
-              focusDistance={0.02}
-              focalLength={0.5}
-              bokehScale={1.2}
+            <DepthOfField 
+              focusDistance={0} 
+              focalLength={0.02} 
+              bokehScale={2} 
+              height={480} 
             />
-            <Vignette
-              offset={0.15}
-              darkness={backgroundMode ? 0.4 : 0.3}
+            <Vignette 
+              darkness={0.2} 
+              offset={0.1} 
             />
           </EffectComposer>
         </Suspense>

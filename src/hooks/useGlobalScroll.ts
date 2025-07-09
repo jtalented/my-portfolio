@@ -1,4 +1,5 @@
 import { useScroll, useTransform, MotionValue } from 'framer-motion';
+import useResponsive from './useResponsive';
 
 interface GlobalScrollHook {
   scrollYProgress: MotionValue<number>;
@@ -13,6 +14,11 @@ interface GlobalScrollHook {
 
 export const useGlobalScroll = (): GlobalScrollHook => {
   const { scrollYProgress } = useScroll();
+  const responsive = useResponsive();
+
+  // Calculate responsive positioning values
+  const maxXOffset = responsive.isMobile ? 120 : responsive.isTablet ? 150 : 180;
+  const maxYOffset = responsive.isMobile ? 30 : responsive.isTablet ? 40 : 50;
 
   // MacBook stays visible and integrated throughout the page
   // Starts large, gets smaller but stays prominent
@@ -28,16 +34,16 @@ export const useGlobalScroll = (): GlobalScrollHook => {
   );
   
   // X position: center -> right -> left -> right (integrated with content)
-  // Using smaller values to keep it on screen
+  // Using responsive values to keep it on screen
   const macbookX = useTransform(scrollYProgress, 
     [0, 0.15, 0.3, 0.5, 0.7, 0.85, 1], 
-    [0, 180, 180, -180, -180, 180, 0]
+    [0, maxXOffset, maxXOffset, -maxXOffset, -maxXOffset, maxXOffset, 0]
   );
   
-  // Y position: follows page scroll naturally
+  // Y position: follows page scroll naturally with responsive offsets
   const macbookY = useTransform(scrollYProgress, 
     [0, 0.2, 0.4, 0.6, 0.8, 1], 
-    [0, -50, 0, 50, 0, -30]
+    [0, -maxYOffset, 0, maxYOffset, 0, -maxYOffset * 0.6]
   );
 
   // Smooth rotation as it moves through sections

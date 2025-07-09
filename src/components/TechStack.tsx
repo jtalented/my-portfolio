@@ -9,6 +9,7 @@ import {
   SiSupabase, SiSalesforce, SiMysql, SiOracle, SiSqlite,
   SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite
 } from 'react-icons/si';
+import useResponsive from '../hooks/useResponsive';
 
 interface TechStackItem {
   name: string;
@@ -17,61 +18,61 @@ interface TechStackItem {
   proficiency: number;
 }
 
-// Hook to detect if it's mobile
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  return isMobile;
-};
-
-const techStackData: TechStackItem[] = [
-  // Frontend
-  { name: 'React', category: 'Frontend', icon: () => <FaReact size={48} className="text-cyan-400 mb-3" />, proficiency: 90 },
-  { name: 'TypeScript', category: 'Frontend', icon: () => <SiTypescript size={48} className="text-blue-400 mb-3" />, proficiency: 85 },
-  { name: 'JavaScript', category: 'Frontend', icon: () => <SiJavascript size={48} className="text-yellow-400 mb-3" />, proficiency: 95 },
-  { name: 'Next.js', category: 'Frontend', icon: () => <SiNextdotjs size={48} className="text-white mb-3" />, proficiency: 80 },
-  { name: 'Tailwind CSS', category: 'Frontend', icon: () => <SiTailwindcss size={48} className="text-cyan-400 mb-3" />, proficiency: 90 },
-  { name: 'Vite', category: 'Frontend', icon: () => <SiVite size={48} className="text-purple-400 mb-3" />, proficiency: 75 },
-
-  // Backend
-  { name: 'Node.js', category: 'Backend', icon: () => <FaNodeJs size={48} className="text-green-400 mb-3" />, proficiency: 85 },
-  { name: 'Python', category: 'Backend', icon: () => <FaPython size={48} className="text-blue-400 mb-3" />, proficiency: 80 },
-  { name: 'Java', category: 'Backend', icon: () => <FaJava size={48} className="text-red-400 mb-3" />, proficiency: 75 },
-  { name: 'GraphQL', category: 'Backend', icon: () => <SiGraphql size={48} className="text-pink-400 mb-3" />, proficiency: 70 },
-
-  // Database
-  { name: 'PostgreSQL', category: 'Database', icon: () => <SiPostgresql size={48} className="text-blue-400 mb-3" />, proficiency: 80 },
-  { name: 'MongoDB', category: 'Database', icon: () => <SiMongodb size={48} className="text-green-400 mb-3" />, proficiency: 85 },
-  { name: 'Supabase', category: 'Database', icon: () => <SiSupabase size={48} className="text-green-400 mb-3" />, proficiency: 75 },
-
-  // DevOps
-  { name: 'Git', category: 'DevOps', icon: () => <FaGitAlt size={48} className="text-orange-400 mb-3" />, proficiency: 90 },
-  { name: 'Docker', category: 'DevOps', icon: () => <SiDocker size={48} className="text-blue-400 mb-3" />, proficiency: 70 },
-
-  // AI Tools
-  { name: 'GitHub Copilot', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-purple-400 mb-3" />, proficiency: 85 },
-  { name: 'ChatGPT', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-green-400 mb-3" />, proficiency: 90 },
-  { name: 'Claude', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-orange-400 mb-3" />, proficiency: 85 },
-];
-
-const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps', 'AI Tools'];
-
 const TechStack = () => {
-  const isMobile = useIsMobile();
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const responsive = useResponsive();
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      // Use responsive system instead of hard-coded breakpoint
+      // The responsive hook already handles this
+    };
+    
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
+  const techStackData: TechStackItem[] = [
+    // Frontend
+    { name: 'React', category: 'Frontend', icon: () => <FaReact size={48} className="text-cyan-400 mb-3" />, proficiency: 90 },
+    { name: 'TypeScript', category: 'Frontend', icon: () => <SiTypescript size={48} className="text-blue-400 mb-3" />, proficiency: 85 },
+    { name: 'JavaScript', category: 'Frontend', icon: () => <SiJavascript size={48} className="text-yellow-400 mb-3" />, proficiency: 95 },
+    { name: 'HTML/CSS', category: 'Frontend', icon: () => <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-3"><span className="text-white font-bold text-xs">HTML</span></div>, proficiency: 95 },
+    { name: 'Tailwind CSS', category: 'Frontend', icon: () => <SiTailwindcss size={48} className="text-cyan-400 mb-3" />, proficiency: 90 },
+    { name: 'Vite', category: 'Frontend', icon: () => <SiVite size={48} className="text-purple-400 mb-3" />, proficiency: 75 },
+
+    // Backend
+    { name: 'Node.js', category: 'Backend', icon: () => <FaNodeJs size={48} className="text-green-400 mb-3" />, proficiency: 85 },
+    { name: 'Python', category: 'Backend', icon: () => <FaPython size={48} className="text-blue-400 mb-3" />, proficiency: 80 },
+    { name: 'Java', category: 'Backend', icon: () => <FaJava size={48} className="text-red-400 mb-3" />, proficiency: 75 },
+    { name: 'GraphQL', category: 'Backend', icon: () => <SiGraphql size={48} className="text-pink-400 mb-3" />, proficiency: 70 },
+
+    // Database
+    { name: 'PostgreSQL', category: 'Database', icon: () => <SiPostgresql size={48} className="text-blue-400 mb-3" />, proficiency: 80 },
+    { name: 'MongoDB', category: 'Database', icon: () => <SiMongodb size={48} className="text-green-400 mb-3" />, proficiency: 85 },
+    { name: 'Supabase', category: 'Database', icon: () => <SiSupabase size={48} className="text-green-400 mb-3" />, proficiency: 75 },
+
+    // DevOps
+    { name: 'Git', category: 'DevOps', icon: () => <FaGitAlt size={48} className="text-orange-400 mb-3" />, proficiency: 90 },
+    { name: 'Docker', category: 'DevOps', icon: () => <SiDocker size={48} className="text-blue-400 mb-3" />, proficiency: 70 },
+
+    // AI Tools
+    { name: 'GitHub Copilot', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-purple-400 mb-3" />, proficiency: 85 },
+    { name: 'ChatGPT', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-green-400 mb-3" />, proficiency: 90 },
+    { name: 'Claude', category: 'AI Tools', icon: () => <FaRobot size={48} className="text-orange-400 mb-3" />, proficiency: 85 },
+  ];
+
+  const categories = ['All', 'Frontend', 'Backend', 'Database', 'DevOps', 'AI Tools'];
+
   const filteredStack = useMemo(() => {
-    return activeCategory === 'All'
-      ? techStackData
-      : techStackData.filter((tech) => tech.category === activeCategory);
-  }, [activeCategory]);
+    if (selectedCategory === 'All') return techStackData;
+    return techStackData.filter(tech => tech.category === selectedCategory);
+  }, [selectedCategory]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -85,11 +86,11 @@ const TechStack = () => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.8, y: 20 },
+    hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: {
       opacity: 1,
-      scale: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.5,
         ease: [0.25, 0.1, 0.25, 1],
@@ -133,20 +134,20 @@ const TechStack = () => {
           </motion.p>
         </motion.div>
 
-        {/* Category Tabs */}
-        <motion.div 
+        {/* Category Filter */}
+        <motion.div
           className="flex flex-wrap justify-center gap-4 mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
         >
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <motion.button
               key={category}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => setSelectedCategory(category)}
               className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 backdrop-blur-sm ${
-                activeCategory === category
+                selectedCategory === category
                   ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg border-0'
                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white border border-gray-600/30'
               }`}
@@ -154,7 +155,7 @@ const TechStack = () => {
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
+              transition={{ duration: 0.3, delay: 0.8 + categories.indexOf(category) * 0.1 }}
             >
               {category}
             </motion.button>
@@ -162,10 +163,10 @@ const TechStack = () => {
         </motion.div>
 
         {/* Tech Grid */}
-        <div className="relative min-h-[500px] flex justify-center">
+        <div className="relative" style={{ minHeight: responsive.isMobile ? 260 : responsive.isTablet ? 350 : 500 }}>
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeCategory}
+              key={selectedCategory}
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 justify-items-center max-w-6xl"
               variants={containerVariants}
               initial="hidden"

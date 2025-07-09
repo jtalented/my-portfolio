@@ -4,6 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { MotionValue } from 'framer-motion';
 import * as THREE from 'three';
 import MacbookScreen from './MacbookScreen';
+import useResponsive from '../../hooks/useResponsive';
 
 export interface MacbookModelRef {
   getCurrentRotation: () => number;
@@ -54,6 +55,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     const { camera } = useThree();
     const [showScreen, setShowScreen] = useState(false);
     const [currentTheme, setCurrentTheme] = useState(sectionThemes[0]);
+    const responsive = useResponsive();
 
     useImperativeHandle(ref, () => ({
       getCurrentRotation: () => modelRef.current?.rotation.y ?? Math.PI,
@@ -137,7 +139,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
       if (!modelRef.current) return;
 
       // Subtle floating animation
-      const baseY = backgroundMode ? -0.6 : -0.8;
+      const baseY = responsive.macbookPosition.y;
       const floatIntensity = backgroundMode ? 0.03 : 0.02;
       const floatOffset = Math.sin(clock.getElapsedTime() * 0.4) * floatIntensity;
       modelRef.current.position.y = baseY + floatOffset;
@@ -186,8 +188,8 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     return (
       <group 
         ref={modelRef} 
-        scale={backgroundMode ? 0.9 : 0.75} 
-        position={[0, backgroundMode ? -0.6 : -0.8, 0]} 
+        scale={responsive.macbookScale} 
+        position={[0, responsive.macbookPosition.y, 0]} 
         rotation={[0, Math.PI, 0]}
       >
         <primitive object={scene} />
