@@ -53,6 +53,8 @@ const ProfessionalMacBook = ({
           mat.metalness = 0.9;
           mat.emissive = new THREE.Color(currentTheme.primary);
           mat.emissiveIntensity = 0.15;
+          mat.transparent = false;
+          mat.opacity = 1;
           mat.needsUpdate = true;
         }
 
@@ -66,6 +68,8 @@ const ProfessionalMacBook = ({
           mat.metalness = 0.95;
           mat.emissive = new THREE.Color(currentTheme.secondary);
           mat.emissiveIntensity = 0.08;
+          mat.transparent = false;
+          mat.opacity = 1;
           mat.needsUpdate = true;
         }
 
@@ -77,6 +81,8 @@ const ProfessionalMacBook = ({
           mat.emissiveIntensity = 0.5;
           mat.roughness = 0.1;
           mat.metalness = 0.3;
+          mat.transparent = false;
+          mat.opacity = 1;
           mat.needsUpdate = true;
         }
 
@@ -124,17 +130,6 @@ const ProfessionalMacBook = ({
         intensity={0.6}
         color={currentTheme.secondary}
       />
-
-      {/* Enhanced screen glow */}
-      <mesh position={[0, 0.7, -0.2]} rotation={[0.1, 0, 0]}>
-        <planeGeometry args={[1.2, 0.8]} />
-        <meshBasicMaterial
-          color={currentTheme.primary}
-          transparent
-          opacity={0.3}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
     </group>
   );
 };
@@ -573,48 +568,52 @@ const GlassShatterEffect = ({
   );
 };
 
+// Add a responsive width check
+function useShouldShowMacbook() {
+  const [shouldShow, setShouldShow] = useState(true);
+  useEffect(() => {
+    function handleResize() {
+      // Hide MacBook if screen is less than 1024px (lg breakpoint)
+      setShouldShow(window.innerWidth >= 1024);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return shouldShow;
+}
+
 // Main Floating MacBook Component
 const FloatingMacBook = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
-  // Direct mobile detection - no state timing issues
-  const finalIsMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-  
-
-  
-
-
+  const isMobile = useIsMobile();
+  const shouldShowMacbook = useShouldShowMacbook();
   const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
   
-  // Start almost full size in middle section, grow slightly to break glass, then stay constant
+  // Always use the same transform arrays
   const macbookScale = useTransform(scrollYProgress, 
     [0, 0.08, 0.10, 0.15, 0.6, 1], 
-    [finalIsMobile ? 0.6 : 0.9, finalIsMobile ? 0.6 : 0.9, finalIsMobile ? 0.65 : 0.95, finalIsMobile ? 0.7 : 1.0, finalIsMobile ? 0.7 : 1.0, finalIsMobile ? 0.7 : 1.0]
+    [0.9, 0.9, 0.95, 1.0, 1.0, 1.0]
   );
-  
+
+  const macbookX = useTransform(scrollYProgress, 
+    [0, 0.10, 0.16, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
+    [0, 0, 0.22, 0.22, -0.15, -0.15, 0.15, 0.15, -0.15, -0.15, 0.1, 0.1]
+  );
+
+  const macbookY = useTransform(scrollYProgress, 
+    [0, 0.10, 0.16, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
+    [0, 0, 80, 120, 0, 0, 0, 0, 0, 0, 0, 0]
+  );
+
   // Start visible in middle section, fade in gradually
   const macbookOpacity = useTransform(scrollYProgress, 
     [0, 0.08, 0.10, 0.15, 0.95, 1], 
     [0.8, 0.8, 0.9, 1, 0.9, 0.8]
   );
   
-  // Dynamic X movement - much more dramatic on mobile
-  const macbookX = useTransform(scrollYProgress, 
-    [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
-    finalIsMobile 
-      ? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  // No X movement on mobile
-      : [0, 0, 0.15, 0.15, -0.15, -0.15, 0.15, 0.15, -0.15, -0.15, 0.1, 0.1]  // Desktop movement
-  );
-  
-  // Y movement - much more dramatic on mobile
-  const macbookY = useTransform(scrollYProgress, 
-    [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
-    finalIsMobile 
-      ? [0, 0, -50, -100, -150, -100, -50, 0, 50, 100, 150, 150]  // Much more dramatic Y movement on mobile
-      : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  // Desktop movement
-  );
-
   // Much faster Z-depth emergence - rapid break through
   const macbookZ = useTransform(scrollYProgress, 
     [0, 0.05, 0.10, 0.15], 
@@ -639,10 +638,11 @@ const FloatingMacBook = () => {
     return unsubscribe;
   }, [scrollYProgress]);
 
+  // Only use isMobile and shouldShowMacbook to control visibility
+  const showMacbook = !isMobile && shouldShowMacbook;
+
   return (
     <>
-
-
       {/* Liquid Glass Morphism Effect */}
       <LiquidGlassMorphism 
         mousePosition={{ x: 0, y: 0 }}
@@ -654,12 +654,10 @@ const FloatingMacBook = () => {
       <GlassShatterEffect 
         scrollProgress={scrollYProgress} 
         scrollVelocity={scrollVelocity}
-        isMobile={finalIsMobile}
+        isMobile={isMobile}
       />
 
-
-
-      {!finalIsMobile && (
+      {showMacbook && (
         <motion.div
           ref={containerRef}
           className="absolute w-full h-screen pointer-events-none z-30"
@@ -672,62 +670,61 @@ const FloatingMacBook = () => {
             z: smoothZ,
           }}
         >
+          {/* 3D MacBook with much larger canvas to prevent cutoff */}
+          <div className="w-full h-full flex items-center justify-center">
+            <Canvas
+              camera={{ position: [0, 0, 4], fov: 70 }}
+              gl={{ alpha: true, antialias: true }}
+              style={{
+                width: isMobile ? 'min(400px, 80vw)' : 'min(1200px, 90vw)',
+                height: isMobile ? 'min(300px, 60vw)' : 'min(900px, 67.5vw)',
+                pointerEvents: 'none',
+              }}
+            >
+              <Suspense fallback={null}>
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[3, 3, 3]} intensity={1} />
+                
+                <ProfessionalMacBook 
+                  scrollProgress={scrollYProgress.get()}
+                  currentSection={currentSection}
+                />
+              </Suspense>
+            </Canvas>
+          </div>
 
-        {/* 3D MacBook with much larger canvas to prevent cutoff */}
-        <div className="w-full h-full flex items-center justify-center">
-          <Canvas
-            camera={{ position: [0, 0, 4], fov: 70 }}
-            gl={{ alpha: true, antialias: true }}
+          {/* Enhanced floating particles that respond to break out */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(15)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 rounded-full"
+                style={{
+                  left: `${10 + i * 6}%`,
+                  top: `${20 + (i % 5) * 15}%`,
+                  background: `radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%)`,
+                  y: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 2 ? -80 : 80)]),
+                  x: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 3 ? -50 : 50)]),
+                  opacity: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.2, 1.2, 0.1]),
+                  scale: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.4, 2, 0.1]),
+                }}
+                transition={{
+                  duration: 2 + i * 0.1,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Dynamic section transition glow */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
             style={{
-              width: finalIsMobile ? 'min(400px, 80vw)' : 'min(1200px, 90vw)',
-              height: finalIsMobile ? 'min(300px, 60vw)' : 'min(900px, 67.5vw)',
-              pointerEvents: 'none',
+              opacity: useTransform(scrollYProgress, [0.14, 0.20, 0.85, 0.95], [0, 1, 1, 0]),
             }}
           >
-            <Suspense fallback={null}>
-              <ambientLight intensity={0.5} />
-              <directionalLight position={[3, 3, 3]} intensity={1} />
-              
-              <ProfessionalMacBook 
-                scrollProgress={scrollYProgress.get()}
-                currentSection={currentSection}
-              />
-            </Suspense>
-          </Canvas>
-        </div>
-
-        {/* Enhanced floating particles that respond to break out */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                left: `${10 + i * 6}%`,
-                top: `${20 + (i % 5) * 15}%`,
-                background: `radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%)`,
-                y: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 2 ? -80 : 80)]),
-                x: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 3 ? -50 : 50)]),
-                opacity: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.2, 1.2, 0.1]),
-                scale: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.4, 2, 0.1]),
-              }}
-              transition={{
-                duration: 2 + i * 0.1,
-                ease: "easeOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Dynamic section transition glow */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            opacity: useTransform(scrollYProgress, [0.14, 0.20, 0.85, 0.95], [0, 1, 1, 0]),
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/12 via-purple-500/12 to-cyan-500/12 rounded-full blur-3xl" />
-        </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/12 via-purple-500/12 to-cyan-500/12 rounded-full blur-3xl" />
+          </motion.div>
         </motion.div>
       )}
     </>

@@ -12,19 +12,28 @@ import Contact from './components/Contact';
 import useIsMobile from './hooks/useIsMobile';
 import { motion, useScroll, useTransform, useVelocity } from 'framer-motion';
 import LiquidGlassMorphism from './components/Macbook/LiquidGlassMorphism';
+import { useMemo } from 'react';
+import { useSpring } from 'framer-motion';
 
 const App = () => {
   const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll({ layoutEffect: false });
   const scrollVelocity = useVelocity(scrollYProgress);
 
+  // Call useTransform and useSpring at the top level
+  const glassOpacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 0.5, 0]);
+  const smoothGlassOpacity = useSpring(glassOpacity, { stiffness: 80, damping: 30 });
+
+  // Memoize mousePosition
+  const mousePosition = useMemo(() => ({ x: 0, y: 0 }), []);
+
   return (
     <Layout>
       {/* Glass effects that work on both mobile and desktop */}
       <LiquidGlassMorphism 
-        mousePosition={{ x: 0, y: 0 }}
+        mousePosition={mousePosition}
         scrollProgress={scrollYProgress}
-        opacity={useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 0.5, 0])}
+        opacity={smoothGlassOpacity}
       />
 
       {/* Professional Hero Section */}
