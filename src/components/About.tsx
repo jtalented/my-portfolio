@@ -145,9 +145,9 @@ const About = () => {
               viewport={{ once: true }}
             >
               {[
-                { number: "3+", label: "Years Experience", gradient: "from-orange-400 to-red-400", icon: "🚀" },
-                { number: "15+", label: "Technologies", gradient: "from-red-400 to-pink-400", icon: "⚡" },
-                { number: "10+", label: "Projects", gradient: "from-pink-400 to-orange-400", icon: "💡" }
+                { number: "4+", label: "Years Experience", gradient: "from-orange-400 to-red-400", icon: "🚀" },
+                { number: "20+", label: "Technologies", gradient: "from-red-400 to-pink-400", icon: "⚡" },
+                { number: "25M+", label: "Impacted Revenue", gradient: "from-pink-400 to-orange-400", icon: "💼" }
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
