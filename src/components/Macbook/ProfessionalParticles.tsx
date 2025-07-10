@@ -1,12 +1,10 @@
 import { useMemo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
-import { MotionValue } from 'framer-motion';
 import * as THREE from 'three';
 
 interface Props {
   mousePosition: { x: number; y: number };
-  scrollProgress: MotionValue<number>;
 }
 
 const ParticleField = ({ mousePosition }: { mousePosition: { x: number; y: number } }) => {
@@ -108,7 +106,7 @@ const ParticleField = ({ mousePosition }: { mousePosition: { x: number; y: numbe
   );
 };
 
-const ProfessionalParticles = ({ mousePosition, scrollProgress }: Props) => {
+const ProfessionalParticles = ({ mousePosition }: Props) => {
   return (
     <div className="absolute inset-0 z-0">
       <Canvas

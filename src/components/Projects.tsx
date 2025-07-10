@@ -123,8 +123,8 @@ const staticProjects: Project[] = [
 ];
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>(staticProjects);
-  const [loading, setLoading] = useState(false);
+  const [projects] = useState<Project[]>(staticProjects);
+  const [loading] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
   const [openOverlay, setOpenOverlay] = useState<number | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -280,7 +280,7 @@ const Projects = () => {
             initial="hidden"
             animate="visible"
           >
-            {filteredProjects.map((project, index) => {
+            {filteredProjects.map((project) => {
               const hasImageError = imgErrors[project.id] || false;
               const hasImage = project.image_url && !hasImageError;
               

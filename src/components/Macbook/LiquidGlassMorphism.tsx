@@ -1,16 +1,9 @@
-import { motion, MotionValue, useTransform, useSpring } from 'framer-motion';
-import { useMemo, useEffect, useRef, useState } from 'react';
-import useResponsive from '../../hooks/useResponsive';
+import { useEffect, useState } from 'react';
 
-interface Props {
-  mousePosition: { x: number; y: number };
-  scrollProgress: MotionValue<number>;
-  opacity: MotionValue<number>;
-}
+interface Props {}
 
-const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) => {
+const LiquidGlassMorphism = ({}: Props) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const responsive = useResponsive();
 
   // Detect large screens and disable animations to prevent flickering
   useEffect(() => {
@@ -32,11 +25,6 @@ const LiquidGlassMorphism = ({ mousePosition, scrollProgress, opacity }: Props) 
       document.body.style.overflow = '';
     };
   }, []);
-
-  // Generate organic blob paths - reduced for better performance
-  const liquidShapes = useMemo(() => [
-    // No blue or purple blobs
-  ], []);
 
   // If large screen, render simplified version without animations
   if (isLargeScreen) {

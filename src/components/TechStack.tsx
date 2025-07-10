@@ -1,19 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
-  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot, FaAws, FaStripe, FaPowerOff, FaCloud, FaDatabase, FaCloudDownloadAlt, FaNetworkWired, FaKey, FaCogs, FaEnvelope, FaCodeBranch, FaTerminal, FaCloudUploadAlt
+  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot, FaAws, FaStripe, FaPowerOff, FaDatabase, FaNetworkWired, FaKey, FaCogs, FaEnvelope, FaTerminal
 } from 'react-icons/fa';
 import {
-  SiSwagger, SiOpenapiinitiative, SiWorkplace, SiInformatica, SiOracle, SiMysql, SiPostgresql, SiMongodb, SiSqlite, SiSupabase, SiSalesforce, SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite, SiExpress, SiRedis, SiFirebase, SiVercel, SiJest, SiCypress, SiFigma, SiInsomnia, SiGraphql, SiAuth0, SiPython, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiCplusplus
+  SiSwagger, SiOpenapiinitiative, SiWorkplace, SiInformatica, SiOracle, SiMysql, SiPostgresql, SiMongodb, SiSqlite, SiSupabase, SiSalesforce, SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite, SiExpress, SiGraphql, SiAuth0, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiCplusplus
 } from 'react-icons/si';
-import useResponsive from '../hooks/useResponsive';
-
-interface TechStackItem {
-  name: string;
-  category: string;
-  icon: () => JSX.Element;
-  proficiency: number;
-}
 
 const techStack = {
   'Frontend': [
@@ -88,7 +80,6 @@ const techStack = {
 
 const TechStack = () => {
   const [activeCategory, setActiveCategory] = useState('Frontend');
-  const responsive = useResponsive();
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
@@ -204,7 +195,7 @@ const TechStack = () => {
           viewport={{ once: true }}
         >
           <AnimatePresence mode="wait">
-            {techStack[activeCategory as keyof typeof techStack].map((tech, index) => (
+            {techStack[activeCategory as keyof typeof techStack].map((tech) => (
               <motion.div
                 key={tech.name}
                 className="group relative"

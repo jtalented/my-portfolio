@@ -11,11 +11,6 @@ const Resume = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -30]);
 
-  const containerVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { staggerChildren: 0.3 } },
-  };
-
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

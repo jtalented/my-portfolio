@@ -1,280 +1,18 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
-import { motion, useScroll, useTransform, useSpring, useVelocity } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
-import * as THREE from 'three';
-import useIsMobile from '../hooks/useIsMobile';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import useResponsive from '../hooks/useResponsive';
 import LiquidGlassMorphism from './Macbook/LiquidGlassMorphism';
-
-// Professional MacBook Component with Dynamic Theming
-const ProfessionalMacBook = ({ 
-  scrollProgress,
-  currentSection 
-}: { 
-  scrollProgress: number;
-  currentSection: number;
-}) => {
-  const modelRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF(`${import.meta.env.BASE_URL}models/macbookprog.glb`);
-  const { camera } = useThree();
-  const responsive = useResponsive();
-
-  // Section-based themes
-  const sectionThemes = [
-    { primary: '#3b82f6', secondary: '#1e40af' }, // Blue - Hero
-    { primary: '#10b981', secondary: '#047857' }, // Green - Terminal
-    { primary: '#f59e0b', secondary: '#d97706' }, // Orange - About
-    { primary: '#8b5cf6', secondary: '#7c3aed' }, // Purple - Tech
-    { primary: '#ef4444', secondary: '#dc2626' }, // Red - Projects
-    { primary: '#06b6d4', secondary: '#0891b2' }, // Cyan - Resume
-    { primary: '#ec4899', secondary: '#db2777' }, // Pink - Contact
-  ];
-
-  const currentTheme = sectionThemes[Math.min(currentSection, sectionThemes.length - 1)];
-
-  useEffect(() => {
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-
-        if (mesh.name.toLowerCase().includes('background')) {
-          mesh.visible = false;
-        }
-
-        // Silver with neon accents
-        const keyCandidates = ['plane005'];
-        if (keyCandidates.some((key) => mesh.name.toLowerCase().startsWith(key))) {
-          mesh.material = (mesh.material as THREE.MeshStandardMaterial).clone();
-          const mat = mesh.material as THREE.MeshStandardMaterial;
-
-          mat.color = new THREE.Color('#e2e8f0'); // Silver
-          mat.roughness = 0.3;
-          mat.metalness = 0.9;
-          mat.emissive = new THREE.Color(currentTheme.primary);
-          mat.emissiveIntensity = 0.15;
-          mat.transparent = false;
-          mat.opacity = 1;
-          mat.needsUpdate = true;
-        }
-
-        // Laptop body
-        if (mesh.name.toLowerCase().includes('laptop') || mesh.name.toLowerCase().includes('macbook')) {
-          mesh.material = (mesh.material as THREE.MeshStandardMaterial).clone();
-          const mat = mesh.material as THREE.MeshStandardMaterial;
-          
-          mat.color = new THREE.Color('#cbd5e1'); // Light silver
-          mat.roughness = 0.2;
-          mat.metalness = 0.95;
-          mat.emissive = new THREE.Color(currentTheme.secondary);
-          mat.emissiveIntensity = 0.08;
-          mat.transparent = false;
-          mat.opacity = 1;
-          mat.needsUpdate = true;
-        }
-
-        // Screen with dynamic theme
-        if (mesh.name.toLowerCase().includes('screen')) {
-          const mat = mesh.material as THREE.MeshStandardMaterial;
-          mat.color = new THREE.Color('#0f172a');
-          mat.emissive = new THREE.Color(currentTheme.primary);
-          mat.emissiveIntensity = 0.5;
-          mat.roughness = 0.1;
-          mat.metalness = 0.3;
-          mat.transparent = false;
-          mat.opacity = 1;
-          mat.needsUpdate = true;
-        }
-
-        // Hide bottom parts
-        if (mesh.position.y < -0.35) {
-          mesh.visible = false;
-        }
-      }
-    });
-  }, [scene, currentTheme]);
-
-  useFrame(({ clock }) => {
-    if (!modelRef.current) return;
-
-    const time = clock.getElapsedTime();
-    
-    // Gentle floating
-    modelRef.current.position.y = -0.5 + Math.sin(time * 0.4) * 0.03;
-    
-    // Smooth rotation based on scroll with more dramatic effect
-    const targetRotationY = Math.PI + (scrollProgress * Math.PI * 0.8);
-    modelRef.current.rotation.y += (targetRotationY - modelRef.current.rotation.y) * 0.08;
-    
-    // More pronounced tilt for breaking out effect
-    modelRef.current.rotation.x = Math.sin(time * 0.2) * 0.1 + (scrollProgress * 0.3);
-    modelRef.current.rotation.z = Math.cos(time * 0.3) * 0.05;
-  });
-
-  return (
-    <group ref={modelRef} scale={responsive.macbookScale} position={[0, responsive.macbookPosition.y, 0]} rotation={[0, Math.PI, 0]}>
-      <primitive object={scene} />
-      
-      {/* Enhanced dynamic lighting */}
-      <pointLight 
-        position={[0, 1, 0]} 
-        intensity={0.8} 
-        color={currentTheme.primary}
-        distance={4}
-      />
-      
-      <spotLight
-        position={[2, 2, 2]}
-        angle={0.4}
-        penumbra={0.3}
-        intensity={0.6}
-        color={currentTheme.secondary}
-      />
-    </group>
-  );
-};
-
-// Unified Glass Overlay Component
-const UnifiedGlassOverlay = ({ scrollProgress }: { scrollProgress: any }) => {
-  const responsive = useResponsive();
-  const { effectCounts, blurSettings } = responsive;
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-15 pointer-events-none"
-      style={{
-        opacity: 0.6,
-      }}
-    >
-      {/* Main glass surface spanning both sections */}
-      <div className="absolute inset-0 backdrop-blur-md bg-gradient-to-br from-blue-500/12 via-cyan-500/10 to-indigo-500/15" />
-      
-      {/* Glass texture pattern */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
-            radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
-            radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
-            linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%)
-          `,
-          backgroundSize: '600px 600px, 400px 400px, 500px 500px, 200px 200px',
-        }}
-      />
-
-      {/* Glass reflection highlights */}
-      {[...Array(effectCounts.reflectionLines)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
-          style={{
-            top: `${15 + i * 15}%`,
-            left: '5%',
-            width: '90%',
-            transform: `rotate(${-8 + i * 3}deg)`,
-          }}
-          animate={{
-            opacity: [0.2, 0.6, 0.2],
-            scaleX: [0.7, 1.3, 0.7],
-          }}
-          transition={{
-            duration: 4 + i * 0.5,
-            repeat: Infinity,
-            delay: i * 0.8,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Floating glass particles */}
-      {[...Array(effectCounts.glassParticles)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-white/50 rounded-full"
-          style={{
-            left: `${15 + i * 7}%`,
-            top: `${20 + (i % 4) * 20}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.8, 0.3],
-            scale: [0.5, 1.5, 0.5],
-          }}
-          transition={{
-            duration: 3 + i * 0.4,
-            repeat: Infinity,
-            delay: i * 0.4,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </motion.div>
-  );
-};
-
-// Helper functions for tessellation
-const calculateCellBounds = (seed: {x: number, y: number}, allSeeds: {x: number, y: number}[], currentIndex: number) => {
-  let minX = 0, maxX = 100, minY = 0, maxY = 100;
-  
-  // Find boundaries based on distance to neighboring seeds
-  allSeeds.forEach((otherSeed, otherIndex) => {
-    if (otherIndex === currentIndex) return;
-    
-    const midX = (seed.x + otherSeed.x) / 2;
-    const midY = (seed.y + otherSeed.y) / 2;
-    
-    if (otherSeed.x < seed.x) minX = Math.max(minX, midX);
-    if (otherSeed.x > seed.x) maxX = Math.min(maxX, midX);
-    if (otherSeed.y < seed.y) minY = Math.max(minY, midY);
-    if (otherSeed.y > seed.y) maxY = Math.min(maxY, midY);
-  });
-  
-  return { minX, maxX, minY, maxY };
-};
-
-const createTessellatedShape = (bounds: {minX: number, maxX: number, minY: number, maxY: number}, seed: {x: number, y: number}, index: number) => {
-  const points = [];
-  
-  // Create organic shape that stays within tessellation bounds
-  const centerX = (bounds.minX + bounds.maxX) / 2;
-  const centerY = (bounds.minY + bounds.maxY) / 2;
-  const radiusX = (bounds.maxX - bounds.minX) / 2;
-  const radiusY = (bounds.maxY - bounds.minY) / 2;
-  
-  const numPoints = 5 + Math.floor(Math.random() * 3);
-  
-  for (let i = 0; i < numPoints; i++) {
-    const angle = (i / numPoints) * 360;
-    const variation = 0.7 + Math.random() * 0.6;
-    
-    const x = centerX + Math.cos(angle * Math.PI / 180) * radiusX * variation;
-    const y = centerY + Math.sin(angle * Math.PI / 180) * radiusY * variation;
-    
-    points.push({
-      x: Math.max(bounds.minX, Math.min(bounds.maxX, x)),
-      y: Math.max(bounds.minY, Math.min(bounds.maxY, y)),
-    });
-  }
-  
-  return `polygon(${points.map(p => `${p.x}% ${p.y}%`).join(', ')})`;
-};
 
 // Simplified Glass Shatter Effect - NO HOOKS IN LOOPS
 const GlassShatterEffect = ({ 
   scrollProgress, 
-  scrollVelocity
 }: { 
   scrollProgress: any;
-  scrollVelocity: any;
 }) => {
   const responsive = useResponsive();
-  const { animationTiming, effectCounts, blurSettings } = responsive;
+  const { animationTiming, blurSettings } = responsive;
 
   // REALISTIC TRIANGULAR GLASS SHARDS - Perfect tessellation with no gaps or overlaps
-  const tessellationPieces = useMemo(() => [
+  const tessellationPieces = [
     // Top edge triangular shards - varying sizes
     { clipPath: "polygon(0% 0%, 18% 0%, 12% 18%)", centerX: 10, centerY: 6, size: 'small' },
     { clipPath: "polygon(18% 0%, 35% 0%, 28% 15%, 12% 18%)", centerX: 23, centerY: 8, size: 'medium' },
@@ -326,38 +64,10 @@ const GlassShatterEffect = ({
     { clipPath: "polygon(58% 78%, 72% 68%, 82% 68%, 85% 100%, 62% 100%)", centerX: 72, centerY: 82, size: 'large' },
     { clipPath: "polygon(82% 68%, 92% 68%, 95% 100%, 85% 100%)", centerX: 88, centerY: 84, size: 'small' },
     { clipPath: "polygon(92% 68%, 100% 72%, 100% 100%, 95% 100%)", centerX: 96, centerY: 85, size: 'small' }
-  ], []);
+  ];
 
   // ALL useTransform calls OUTSIDE the map - no hooks in loops!
-  const fragmentVisibility = useTransform(
-    scrollProgress,
-    [0, animationTiming.glassBreakStart, animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
-    [0.7, 0.7, 0.9, 0.9, 0]
-  );
-
-  const separationProgress = useTransform(
-    scrollProgress,
-    [animationTiming.glassBreakStart, animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
-    [0, 0, 1, 1]
-  );
-
-  const largeFragmentScale = useTransform(
-    scrollProgress,
-    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
-    [1, 1.08, 0.3]
-  );
-
-  const mediumFragmentScale = useTransform(
-    scrollProgress,
-    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
-    [1, 1.06, 0.2]
-  );
-
-  const smallFragmentScale = useTransform(
-    scrollProgress,
-    [animationTiming.glassBreakEnd, animationTiming.glassShatterEnd, animationTiming.glassDisperseEnd],
-    [1, 1.04, 0.1]
-  );
+  // Remove the unused variables fragmentVisibility, largeFragmentScale, mediumFragmentScale, smallFragmentScale, and scrollVelocity
 
   return (
     <>
@@ -564,45 +274,22 @@ const GlassShatterEffect = ({
   );
 };
 
-// Add a responsive width check
-function useShouldShowMacbook() {
-  const [shouldShow, setShouldShow] = useState(true);
-  const responsive = useResponsive();
-  
-  useEffect(() => {
-    function handleResize() {
-      // Hide MacBook if screen is less than 1024px (lg breakpoint)
-      setShouldShow(responsive.viewportWidth >= 1024);
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [responsive.viewportWidth]);
-  return shouldShow;
-}
-
 // Main Floating MacBook Component
 const FloatingMacBook = () => {
   const { scrollYProgress } = useScroll();
-  const scrollVelocity = useVelocity(scrollYProgress);
+  // Remove the unused variables fragmentVisibility, largeFragmentScale, mediumFragmentScale, smallFragmentScale, and scrollVelocity
 
   return (
     <>
       {/* Liquid Glass Morphism Effect */}
-      <LiquidGlassMorphism 
-        mousePosition={{ x: 0, y: 0 }}
-        scrollProgress={scrollYProgress}
-        opacity={useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 0.5, 0])}
-      />
+      <LiquidGlassMorphism />
 
       {/* Enhanced Glass Shatter Effect */}
       <GlassShatterEffect 
         scrollProgress={scrollYProgress} 
-        scrollVelocity={scrollVelocity}
       />
     </>
   );
 };
 
-export default FloatingMacBook;
-useGLTF.preload(`${import.meta.env.BASE_URL}models/macbookprog.glb`); 
+export default FloatingMacBook; 

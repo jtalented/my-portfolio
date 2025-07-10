@@ -1,44 +1,28 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useTransform, useScroll, useSpring, animate, useMotionValue } from 'framer-motion';
+import { motion, useTransform, useScroll } from 'framer-motion';
 import LiquidGlassMorphism from './LiquidGlassMorphism';
 import useResponsive from '../../hooks/useResponsive';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
 const Hero = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isScrollingFromHero, setIsScrollingFromHero] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const responsive = useResponsive();
-  const scrollY = useMotionValue(0);
   const { lockScroll, unlockScroll } = useScrollLock();
 
   const { scrollYProgress } = useScroll({
     layoutEffect: false,
   });
 
-  // Professional scroll-based animations
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
-  const glassOpacity = useTransform(scrollYProgress, [0, 0.1, 0.6], [0.9, 1, 0.3]);
-  
-  // Glass overlay effect that disappears when shattered
-  const glassOverlayOpacity = useTransform(scrollYProgress, [0, 0.06, 0.12], [0.6, 0.8, 0]);
-
   // Smooth spring animations
-  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-  const smoothTextY = useSpring(textY, springConfig);
-  const smoothOpacity = useSpring(heroOpacity, springConfig);
+  const smoothTextY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
 
   // Mouse tracking for interactive effects
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = () => {
       if (!responsive.isMobile && heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: (e.clientX - rect.left - rect.width / 2) / rect.width,
-          y: (e.clientY - rect.top - rect.height / 2) / rect.height,
-        });
+        // No-op, mouse tracking removed
       }
     };
 
@@ -229,11 +213,7 @@ const Hero = () => {
       </div>
 
       {/* Liquid Glass Morphism */}
-      <LiquidGlassMorphism 
-        mousePosition={mousePosition}
-        scrollProgress={scrollYProgress}
-        opacity={glassOpacity}
-      />
+      <LiquidGlassMorphism />
 
       {/* Modern Hero Content */}
       <motion.div

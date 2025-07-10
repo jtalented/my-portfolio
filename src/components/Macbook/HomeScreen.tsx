@@ -275,7 +275,6 @@ const HomeScreen = () => {
     
     // Calculate responsive layout values
     const basePadding = responsive.isMobile ? 60 : responsive.isTablet ? 80 : 117;
-    const sidePadding = responsive.isMobile ? 40 : responsive.isTablet ? 60 : 128;
     const defaultWidth = responsive.screenDimensions.uiWidth;
     const defaultHeight = responsive.screenDimensions.uiHeight;
 

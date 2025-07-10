@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform, animate, useScroll } from 'framer-motion';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { useGLTF } from '@react-three/drei';

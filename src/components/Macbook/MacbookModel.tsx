@@ -17,7 +17,6 @@ interface Props {
   screenOn?: boolean;
   isMobile?: boolean;
   mousePosition?: { x: number; y: number };
-  scrollProgress?: MotionValue<number>;
   customRotationY?: MotionValue<number>;
   customRotationX?: MotionValue<number>;
   currentSection?: MotionValue<number>;
@@ -42,7 +41,6 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     rotationStart, 
     screenOn, 
     mousePosition = { x: 0, y: 0 }, 
-    scrollProgress,
     customRotationY,
     customRotationX,
     currentSection,

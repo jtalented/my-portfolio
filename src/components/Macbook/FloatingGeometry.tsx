@@ -2,13 +2,10 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Float, Sphere, Box, Octahedron } from '@react-three/drei';
-import { MotionValue } from 'framer-motion';
 import * as THREE from 'three';
 
 interface Props {
   mousePosition: { x: number; y: number };
-  scrollProgress: MotionValue<number>;
-  rotation: MotionValue<number>;
 }
 
 // Floating Geometric Shape Component
@@ -129,7 +126,7 @@ const GeometricShape = ({
   );
 };
 
-const FloatingGeometry = ({ mousePosition, scrollProgress, rotation }: Props) => {
+const FloatingGeometry = ({ mousePosition }: Props) => {
   const geometricShapes = [
     { position: [-4, 2, -2] as [number, number, number], color: '#3b82f6', size: 0.3, shape: 'sphere' as const },
     { position: [4, -1, -3] as [number, number, number], color: '#8b5cf6', size: 0.4, shape: 'box' as const },

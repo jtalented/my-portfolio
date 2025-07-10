@@ -17,7 +17,6 @@ interface Props {
   isMobile?: boolean;
   mousePosition?: { x: number; y: number };
   scrollProgress?: MotionValue<number>;
-  allowDrag?: boolean;
   customRotationY?: MotionValue<number>;
   customRotationX?: MotionValue<number>;
   currentSection?: MotionValue<number>;
@@ -32,8 +31,6 @@ const SceneCanvas = ({
   modelRef,
   isMobile = false,
   mousePosition = { x: 0, y: 0 },
-  scrollProgress,
-  allowDrag = false,
   customRotationY,
   customRotationX,
   currentSection,
@@ -118,7 +115,6 @@ const SceneCanvas = ({
             screenOn={zoomIn && rotationDone}
             isMobile={isMobile}
             mousePosition={mousePosition}
-            scrollProgress={scrollProgress}
             customRotationY={customRotationY}
             customRotationX={customRotationX}
             currentSection={currentSection}

@@ -1,6 +1,6 @@
 // components/Timeline.tsx
 import { useState } from 'react';
-import { motion, AnimatePresence, Variants, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import useResponsive from '../hooks/useResponsive';
 
@@ -61,7 +61,7 @@ const categoryColors = {
   Work: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
 };
 
-const cardVariants: Variants = {
+const cardVariants = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   exit: { opacity: 0, y: -30, transition: { duration: 0.3 } },
