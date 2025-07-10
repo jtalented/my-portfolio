@@ -2,6 +2,7 @@ import { Html } from '@react-three/drei';
 import { useState, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import HomeScreen from './HomeScreen';
+import useResponsive from '../../hooks/useResponsive';
 
 interface MacbookScreenProps {
   screenOn?: boolean;
@@ -13,25 +14,24 @@ const MacbookScreen = ({ screenOn = false }: MacbookScreenProps) => {
   const visibilityRef = useRef(false);
   const lastVisibleTime = useRef(0);
   const htmlRef = useRef<HTMLDivElement>(null);
+  const responsive = useResponsive();
 
-
-  
   //iOS detection
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 
-  //Positioning & Sizing Adjustments
-  const screenX = isIOS ? 0.0 : 0;
-  const screenY = isIOS ? 1.90 : 1.45;
-  const screenZ = isIOS ? -0.372 : -0.39;
-  const screenRotationX = 0.16;
+  // Use responsive values instead of hard-coded values
+  const { screenDimensions, macbookPosition } = responsive;
+  
+  const screenX = macbookPosition.x;
+  const screenY = macbookPosition.y;
+  const screenZ = macbookPosition.z;
+  const screenRotationX = macbookPosition.rotationX;
 
-  const distanceFactor = isIOS ? 1.1 : 1.2;
-
-  const backgroundWidth = isIOS ? 1330 : 1223;
-  const backgroundHeight = isIOS ? 890 : 810;
-
-  const uiWidth = isIOS ? 880 : 900;
-  const uiHeight = isIOS ? 580 : 560;
+  const distanceFactor = screenDimensions.distanceFactor;
+  const backgroundWidth = screenDimensions.backgroundWidth;
+  const backgroundHeight = screenDimensions.backgroundHeight;
+  const uiWidth = screenDimensions.uiWidth;
+  const uiHeight = screenDimensions.uiHeight;
 
   useFrame(({ clock }) => {
     if (htmlRef.current) {
@@ -144,8 +144,6 @@ const MacbookScreen = ({ screenOn = false }: MacbookScreenProps) => {
         occlude
         zIndexRange={[100, 0]}
       >
-
-
         <div
           ref={htmlRef}
           className="bg-black rounded-md relative overflow-hidden"
@@ -175,8 +173,6 @@ const MacbookScreen = ({ screenOn = false }: MacbookScreenProps) => {
           />
         </div>
       </Html>
-
-
 
       {screenOn && (
         <Html

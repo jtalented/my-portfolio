@@ -1,8 +1,8 @@
 // components/Timeline.tsx
 import { useState } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { motion, AnimatePresence, Variants, useScroll, useTransform } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { theme } from '../styles/theme';
+import useResponsive from '../hooks/useResponsive';
 
 const timelineData = [
   {
@@ -10,37 +10,56 @@ const timelineData = [
     title: 'National Competitions – BPA',
     description:
       'Top 5 State Finalist in Visual Basic, Top 50 National Placement. Top 5 State Finalist in C++, 11th Place at Nationals.',
+    category: 'Achievement',
+    icon: '🏆'
   },
   {
     year: '2019',
     title: 'Valedictorian – Baker High School',
     description: 'Graduated top of class with a 4.0 GPA.',
+    category: 'Education',
+    icon: '🎓'
   },
   {
     year: '2020–2022',
     title: 'Volunteer Missionary',
     description:
       'Served a full-time mission. Led and trained teams of 6–10 missionaries, developed communication and leadership skills.',
+    category: 'Service',
+    icon: '🤝'
   },
   {
     year: '2020–2025',
     title: 'B.S. Computer Science – BYU',
     description:
       'Studied systems, deep learning, and full-stack development. GPA: 3.56.',
+    category: 'Education',
+    icon: '🎓'
   },
   {
     year: '2023–2025',
     title: 'Full Stack Developer – BYU Office of IT',
     description:
       'Led systems integration, mentored dev teams, and collaborated with cross-functional partners.',
+    category: 'Work',
+    icon: '💼'
   },
   {
     year: '2025–Present',
     title: 'Full Stack Developer – Fund Launch',
     description:
       'Built a financial education platform with React/Next.js, Supabase, and secure cloud infrastructure.',
+    category: 'Work',
+    icon: '🚀'
   },
 ];
+
+const categoryColors = {
+  Achievement: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+  Education: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  Service: 'bg-green-500/20 text-green-300 border-green-500/30',
+  Work: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+};
 
 const cardVariants: Variants = {
   initial: { opacity: 0, y: 30 },
@@ -51,6 +70,9 @@ const cardVariants: Variants = {
 const Timeline = () => {
   const [index, setIndex] = useState(0);
   const event = timelineData[index];
+  const responsive = useResponsive();
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -30]);
 
   const handlePrev = () => {
     setIndex((prev) => (prev === 0 ? timelineData.length - 1 : prev - 1));
@@ -61,83 +83,221 @@ const Timeline = () => {
   };
 
   return (
-    <section id="timeline" className="py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
-      <h2
-        className="text-4xl sm:text-5xl md:text-6xl font-bold mb-12 font-orbitron"
-        style={{ color: theme.colors.primary }}
-      >
-        Timeline
-      </h2>
+    <section id="timeline" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
+      {/* Premium background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+      
+      {/* Sophisticated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(251,146,60,0.08),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(239,68,68,0.08),transparent_50%)]"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-red-500/5 rounded-full blur-3xl"></div>
+      </div>
 
+      <motion.div className="max-w-6xl mx-auto relative z-10" style={{ y }}>
+        {/* Modern header */}
+        <motion.div 
+          className="text-center mb-16 sm:mb-20 md:mb-24"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          viewport={{ once: true }}
+        >
+          <motion.div
+            className="inline-flex items-center gap-3 mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <div className="w-8 h-px bg-gradient-to-r from-transparent to-orange-500"></div>
+            <span className="text-orange-400 font-medium tracking-wider text-sm uppercase">Experience</span>
+            <div className="w-8 h-px bg-gradient-to-r from-orange-500 to-transparent"></div>
+          </motion.div>
+          
+          <motion.h2 
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-8 leading-tight"
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            My <span className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">Journey</span>
+          </motion.h2>
+          
+          <motion.p 
+            className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            Key milestones and experiences that have shaped my career and professional development
+          </motion.p>
+        </motion.div>
 
-
-      {/* Timeline Bar (hidden on mobile) */}
-      <div className="relative mb-14 hidden sm:block">
-        <div className="w-full h-1 bg-gray-700 rounded-full absolute top-1/2 transform -translate-y-1/2" />
-        <div className="flex justify-between relative z-10 px-4">
-          {timelineData.map((item, i) => (
-            <div key={i} className="flex flex-col items-center w-full">
-              <div
-                className={`w-4 h-4 rounded-full mb-2 transition ${
-                  i === index ? 'bg-blue-500 scale-110' : 'bg-gray-500'
-                }`}
-              />
-              <span
-                className={`text-sm transition ${
-                  i === index ? 'text-blue-400 font-medium' : 'text-gray-400'
-                }`}
-              >
-                {item.year}
-              </span>
+        {/* Professional Timeline Progress Bar */}
+        <div className="relative mb-16 hidden md:block px-4">
+          <div className="relative">
+            {/* Timeline dots container with proper spacing */}
+            <div className="relative flex" style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+              {timelineData.map((item, i) => (
+                <motion.button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className="group flex flex-col items-center relative z-10"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    position: 'absolute',
+                    left: `${(i / (timelineData.length - 1)) * 100}%`,
+                    transform: 'translateX(-50%)'
+                  }}
+                >
+                  {/* Dot */}
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 shadow-lg transition-all duration-300 ${
+                      i <= index 
+                        ? 'bg-orange-500 border-orange-400 shadow-orange-500/30' 
+                        : 'bg-slate-600 border-slate-500 hover:bg-slate-500 hover:border-slate-400'
+                    }`}
+                  />
+                  
+                  {/* Year label */}
+                  <span
+                    className={`text-sm mt-4 transition-all duration-300 font-medium whitespace-nowrap ${
+                      i === index 
+                        ? 'text-orange-400 font-semibold' 
+                        : 'text-slate-400 group-hover:text-slate-300'
+                    }`}
+                  >
+                    {item.year}
+                  </span>
+                </motion.button>
+              ))}
             </div>
+            
+            {/* Background line positioned to connect dots */}
+            <div 
+              className="absolute top-2 h-1 bg-slate-700/50 rounded-full"
+              style={{
+                left: '10px',
+                right: '10px'
+              }}
+            ></div>
+            
+            {/* Animated progress line */}
+            <div 
+              className="absolute top-2 h-1 bg-slate-700/50 rounded-full overflow-hidden"
+              style={{
+                left: '10px',
+                right: '10px'
+              }}
+            >
+              <motion.div 
+                className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                animate={{ width: `${(index / (timelineData.length - 1)) * 100}%` }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Timeline - Simplified dots */}
+        <div className="flex justify-center gap-3 mb-8 md:hidden">
+          {timelineData.map((_, i) => (
+            <motion.button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                i === index ? 'bg-orange-500 scale-125' : 'bg-slate-600'
+              }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
           ))}
         </div>
-      </div>
 
+        {/* Enhanced Current Event Card */}
+        <div className="relative" style={{ minHeight: responsive.isMobile ? 200 : responsive.isTablet ? 280 : 320 }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              className="bg-slate-800/50 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-8 max-w-3xl mx-auto border border-slate-700/50"
+              variants={cardVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <div className="flex items-start gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl flex items-center justify-center border border-slate-600/50">
+                    <span className="text-2xl">{event.icon}</span>
+                  </div>
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl font-bold text-white">
+                      {event.year}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${categoryColors[event.category as keyof typeof categoryColors]}`}>
+                      {event.category}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    {event.title}
+                  </h3>
+                  <p className="text-slate-300 leading-relaxed text-lg">
+                    {event.description}
+                  </p>
+                </div>
+              </div>
 
+              {/* Enhanced Progress indicator */}
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-700/50">
+                <span className="text-sm text-slate-400 font-medium">
+                  {index + 1} of {timelineData.length}
+                </span>
+                <div className="flex gap-2">
+                  {timelineData.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        i === index ? 'bg-orange-500' : 'bg-slate-600'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-
-      {/* Animated Card */}
-      <div className="relative min-h-[240px] sm:min-h-[220px] mb-8 px-2">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            className="bg-gray-900 border border-gray-700 p-6 rounded-xl shadow-xl max-w-xl mx-auto"
-            variants={cardVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
+        {/* Enhanced Navigation */}
+        <div className="flex justify-center gap-6 mt-12">
+          <motion.button
+            onClick={handlePrev}
+            className="flex items-center gap-2 px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white rounded-xl transition-all duration-300 border border-slate-700/50 hover:border-slate-600/50 backdrop-blur-sm"
+            whileHover={{ scale: 1.05, x: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <h3 className="text-lg sm:text-xl text-white font-semibold mb-1">
-              {event.year}
-            </h3>
-            <h4 className="text-base sm:text-lg text-blue-400 font-medium mb-2">
-              {event.title}
-            </h4>
-            <p className="text-sm text-gray-300">{event.description}</p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-
-
-      {/* Arrows */}
-      <div className="flex justify-center gap-6 mt-4">
-        <button
-          onClick={handlePrev}
-          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition"
-          aria-label="Previous"
-        >
-          <FaChevronLeft className="text-white w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-        <button
-          onClick={handleNext}
-          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition"
-          aria-label="Next"
-        >
-          <FaChevronRight className="text-white w-4 h-4 sm:w-5 sm:h-5" />
-        </button>
-      </div>
+            <FaChevronLeft className="text-sm" />
+            <span className="font-medium">Previous</span>
+          </motion.button>
+          
+          <motion.button
+            onClick={handleNext}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-orange-500/25"
+            whileHover={{ scale: 1.05, x: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="font-medium">Next</span>
+            <FaChevronRight className="text-sm" />
+          </motion.button>
+        </div>
+      </motion.div>
     </section>
   );
 };
