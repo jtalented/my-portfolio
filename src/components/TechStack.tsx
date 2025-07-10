@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
-  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot,
+  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot, FaAws, FaStripe, FaPowerOff, FaCloud, FaDatabase, FaCloudDownloadAlt, FaNetworkWired, FaKey, FaCogs, FaEnvelope, FaCodeBranch, FaTerminal, FaCloudUploadAlt
 } from 'react-icons/fa';
 import {
-  SiJavascript, SiTypescript, SiHtml5, SiCss3, SiPostgresql,
-  SiMongodb, SiDocker, SiCplusplus, SiGraphql, SiAuth0,
-  SiSupabase, SiSalesforce, SiMysql, SiOracle, SiSqlite,
-  SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite,
-  SiExpress, SiRedis, SiFirebase, SiVercel,
-  SiJest, SiCypress, SiFigma, SiInsomnia
+  SiSwagger, SiOpenapiinitiative, SiWorkplace, SiInformatica, SiOracle, SiMysql, SiPostgresql, SiMongodb, SiSqlite, SiSupabase, SiSalesforce, SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite, SiExpress, SiRedis, SiFirebase, SiVercel, SiJest, SiCypress, SiFigma, SiInsomnia, SiGraphql, SiAuth0, SiPython, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiCplusplus
 } from 'react-icons/si';
 import useResponsive from '../hooks/useResponsive';
 
@@ -36,35 +31,52 @@ const techStack = {
     { name: 'Java', icon: () => <FaJava className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 85 },
     { name: 'Python', icon: () => <FaPython className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 80 },
     { name: 'C++', icon: () => <SiCplusplus className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'Visual Basic', icon: () => <FaTools className="text-purple-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'SQL', icon: () => <FaDatabase className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 80 },
     { name: 'GraphQL', icon: () => <SiGraphql className="text-pink-400 text-4xl sm:text-5xl" />, proficiency: 70 },
     { name: 'Auth0', icon: () => <SiAuth0 className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 75 },
   ],
-  'Database': [
-    { name: 'PostgreSQL', icon: () => <SiPostgresql className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
-    { name: 'MongoDB', icon: () => <SiMongodb className="text-green-500 text-4xl sm:text-5xl" />, proficiency: 80 },
-    { name: 'Supabase', icon: () => <SiSupabase className="text-green-400 text-4xl sm:text-5xl" />, proficiency: 70 },
-    { name: 'MySQL', icon: () => <SiMysql className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
-    { name: 'SQLite', icon: () => <SiSqlite className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+  'Databases': [
+    { name: 'Postgres', icon: () => <SiPostgresql className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
     { name: 'Oracle', icon: () => <SiOracle className="text-red-400 text-4xl sm:text-5xl" />, proficiency: 65 },
+    { name: 'MySQL', icon: () => <SiMysql className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'MongoDB', icon: () => <SiMongodb className="text-green-500 text-4xl sm:text-5xl" />, proficiency: 80 },
+    { name: 'SQLite', icon: () => <SiSqlite className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'Supabase', icon: () => <SiSupabase className="text-green-400 text-4xl sm:text-5xl" />, proficiency: 70 },
   ],
-  'DevOps': [
+  'Frameworks & Tools': [
+    { name: 'Docker', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
     { name: 'Git', icon: () => <FaGitAlt className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 90 },
-    { name: 'Docker', icon: () => <SiDocker className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
-    { name: 'Bash', icon: () => <FaTools className="text-gray-400 text-4xl sm:text-5xl" />, proficiency: 80 },
-    { name: 'PowerShell', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
-  ],
-  'ETL': [
-    { name: 'Informatica', icon: () => <FaTools className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 70 },
-    { name: 'Boomi', icon: () => <FaTools className="text-cyan-400 text-4xl sm:text-5xl" />, proficiency: 65 },
-    { name: 'Salesforce', icon: () => <SiSalesforce className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
-    { name: 'Workday', icon: () => <FaTools className="text-yellow-400 text-4xl sm:text-5xl" />, proficiency: 60 },
-    { name: 'Netsuite', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 65 },
-    { name: 'Dremio', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 60 },
-  ],
-  'Tools': [
-    { name: 'Visual Basic', icon: () => <FaTools className="text-purple-400 text-4xl sm:text-5xl" />, proficiency: 70 },
-    { name: 'Postman', icon: () => <SiPostman className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 85 },
     { name: 'Jupyter Notebooks', icon: () => <SiJupyter className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'Postman', icon: () => <SiPostman className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 85 },
+    { name: 'NPM', icon: () => <FaTools className="text-green-400 text-4xl sm:text-5xl" />, proficiency: 80 },
+    { name: 'PIP', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 80 },
+    { name: 'Vite', icon: () => <SiVite className="text-purple-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'Express', icon: () => <SiExpress className="text-gray-300 text-4xl sm:text-5xl" />, proficiency: 70 },
+  ],
+  'API Protocols': [
+    { name: 'REST', icon: () => <FaNetworkWired className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 85 },
+    { name: 'SOAP', icon: () => <FaEnvelope className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'GraphQL', icon: () => <SiGraphql className="text-pink-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'OIDC', icon: () => <FaKey className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 65 },
+  ],
+  'ETL & Integrations': [
+    { name: 'Informatica Cloud', icon: () => <SiInformatica className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'PowerCenter', icon: () => <FaCogs className="text-gray-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'Boomi', icon: () => <FaTools className="text-cyan-400 text-4xl sm:text-5xl" />, proficiency: 65 },
+    { name: 'AWS', icon: () => <FaAws className="text-yellow-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'Workday', icon: () => <SiWorkplace className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 60 },
+    { name: 'Salesforce', icon: () => <SiSalesforce className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'Dremio', icon: () => <FaDatabase className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 60 },
+    { name: 'Auth0', icon: () => <SiAuth0 className="text-orange-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'Netsuite', icon: () => <FaTools className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 65 },
+    { name: 'Stripe', icon: () => <FaStripe className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 65 },
+  ],
+  'DevOps & Scripting': [
+    { name: 'Bash', icon: () => <FaTerminal className="text-gray-400 text-4xl sm:text-5xl" />, proficiency: 80 },
+    { name: 'PowerShell', icon: () => <FaPowerOff className="text-blue-400 text-4xl sm:text-5xl" />, proficiency: 75 },
+    { name: 'Swagger', icon: () => <SiSwagger className="text-green-400 text-4xl sm:text-5xl" />, proficiency: 70 },
+    { name: 'OpenAPI', icon: () => <SiOpenapiinitiative className="text-yellow-400 text-4xl sm:text-5xl" />, proficiency: 70 },
   ],
   'AI Tools': [
     { name: 'GitHub Copilot', icon: () => <FaRobot className="text-purple-400 text-4xl sm:text-5xl" />, proficiency: 85 },
