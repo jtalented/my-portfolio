@@ -186,12 +186,7 @@ const MacbookModel = forwardRef<MacbookModelRef, Props>(
     });
 
     return (
-      <group 
-        ref={modelRef} 
-        scale={responsive.macbookScale} 
-        position={[0, responsive.macbookPosition.y, 0]} 
-        rotation={[0, Math.PI, 0]}
-      >
+      <group ref={modelRef} scale={responsive.macbookScale} position={[0, 0, 0]} rotation={[0, Math.PI, 0]}>
         <primitive object={scene} />
 
         {/* Screen with dynamic glow */}

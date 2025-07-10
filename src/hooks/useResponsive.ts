@@ -29,6 +29,9 @@ interface ResponsiveValues {
     rotationX: number;
   };
   
+  // MacBook path end position
+  macbookEndX: number;
+  
   // Screen dimensions for MacBook
   screenDimensions: {
     backgroundWidth: number;
@@ -140,7 +143,7 @@ const useResponsive = (): ResponsiveValues => {
     
     // Animation timing - faster on mobile
     const animationTiming = {
-      glassBreakStart: isMobile ? 0.005 : 0.02,
+      glassBreakStart: isMobile ? 0.002 : 0.01,
       glassBreakEnd: isMobile ? 0.05 : 0.12,
       glassShatterStart: isMobile ? 0.05 : 0.12,
       glassShatterEnd: isMobile ? 0.10 : 0.22,
@@ -162,6 +165,9 @@ const useResponsive = (): ResponsiveValues => {
       particleBlur: isMobile ? 2 : isTablet ? 3 : 4
     };
     
+    // MacBook path end position
+    const macbookEndX = isMobile ? 0.5 : isTablet ? 0.7 : isDesktop ? 0.9 : 1.1;
+    
     return {
       isMobile,
       isTablet,
@@ -173,6 +179,7 @@ const useResponsive = (): ResponsiveValues => {
       scaleFactor,
       macbookScale,
       macbookPosition,
+      macbookEndX,
       screenDimensions,
       canvasSettings,
       animationTiming,

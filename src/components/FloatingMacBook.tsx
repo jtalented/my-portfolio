@@ -583,62 +583,8 @@ function useShouldShowMacbook() {
 
 // Main Floating MacBook Component
 const FloatingMacBook = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [currentSection, setCurrentSection] = useState(0);
-  const isMobile = useIsMobile();
-  const responsive = useResponsive();
-  const shouldShowMacbook = useShouldShowMacbook();
   const { scrollYProgress } = useScroll();
   const scrollVelocity = useVelocity(scrollYProgress);
-  
-  // Always use the same transform arrays
-  const macbookScale = useTransform(scrollYProgress, 
-    [0, 0.08, 0.10, 0.15, 0.6, 1], 
-    [0.9, 0.9, 0.95, 1.0, 1.0, 1.0]
-  );
-
-  const macbookX = useTransform(scrollYProgress, 
-    [0, 0.10, 0.16, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
-    [0, 0, 0.22, 0.22, -0.15, -0.15, 0.15, 0.15, -0.15, -0.15, 0.1, 0.1]
-  );
-
-  const macbookY = useTransform(scrollYProgress, 
-    [0, 0.10, 0.16, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], 
-    [0, 0, 80, 120, 0, 0, 0, 0, 0, 0, 0, 0]
-  );
-
-  // Start visible in middle section, fade in gradually
-  const macbookOpacity = useTransform(scrollYProgress, 
-    [0, 0.08, 0.10, 0.15, 0.95, 1], 
-    [0.8, 0.8, 0.9, 1, 0.9, 0.8]
-  );
-  
-  // Much faster Z-depth emergence - rapid break through
-  const macbookZ = useTransform(scrollYProgress, 
-    [0, 0.05, 0.10, 0.15], 
-    [-200, -150, -50, 200]
-  );
-
-  // Smooth spring animations with more responsive settings
-  const springConfig = { stiffness: 120, damping: 30, restDelta: 0.001 };
-  const smoothX = useSpring(macbookX, springConfig);
-  const smoothY = useSpring(macbookY, springConfig);
-  const smoothScale = useSpring(macbookScale, springConfig);
-  const smoothOpacity = useSpring(macbookOpacity, springConfig);
-  const smoothZ = useSpring(macbookZ, springConfig);
-
-  // Track current section
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      const section = Math.floor(latest * 7); // 7 sections
-      setCurrentSection(Math.min(section, 6));
-    });
-
-    return unsubscribe;
-  }, [scrollYProgress]);
-
-  // Only use isMobile and shouldShowMacbook to control visibility
-  const showMacbook = !isMobile && shouldShowMacbook;
 
   return (
     <>
@@ -654,77 +600,6 @@ const FloatingMacBook = () => {
         scrollProgress={scrollYProgress} 
         scrollVelocity={scrollVelocity}
       />
-
-      {showMacbook && (
-        <motion.div
-          ref={containerRef}
-          className="absolute w-full h-screen pointer-events-none z-30"
-          style={{
-            top: useTransform(scrollYProgress, [0, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1], ['100vh', '100vh', '140vh', '200vh', '280vh', '380vh', '480vh', '580vh', '650vh', '720vh', '850vh', '850vh']),
-            scale: smoothScale,
-            opacity: smoothOpacity,
-            x: useTransform(smoothX, (x) => `${x * 100}vw`),
-            y: smoothY,
-            z: smoothZ,
-          }}
-        >
-          {/* 3D MacBook with much larger canvas to prevent cutoff */}
-          <div className="w-full h-full flex items-center justify-center">
-            <Canvas
-              camera={{ position: responsive.canvasSettings.cameraPosition, fov: responsive.canvasSettings.cameraFov }}
-              gl={{ alpha: true, antialias: true }}
-              style={{
-                width: responsive.canvasSettings.canvasWidth,
-                height: responsive.canvasSettings.canvasHeight,
-                pointerEvents: 'none',
-              }}
-            >
-              <Suspense fallback={null}>
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[3, 3, 3]} intensity={1} />
-                
-                <ProfessionalMacBook 
-                  scrollProgress={scrollYProgress.get()}
-                  currentSection={currentSection}
-                />
-              </Suspense>
-            </Canvas>
-          </div>
-
-          {/* Enhanced floating particles that respond to break out */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(responsive.effectCounts.floatingParticles)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-2 h-2 rounded-full"
-                style={{
-                  left: `${10 + i * 6}%`,
-                  top: `${20 + (i % 5) * 15}%`,
-                  background: `radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, transparent 70%)`,
-                  y: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 2 ? -80 : 80)]),
-                  x: useTransform(scrollYProgress, [0.08, 0.20], [0, (i % 3 ? -50 : 50)]),
-                  opacity: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.2, 1.2, 0.1]),
-                  scale: useTransform(scrollYProgress, [0.08, 0.14, 0.20], [0.4, 2, 0.1]),
-                }}
-                transition={{
-                  duration: 2 + i * 0.1,
-                  ease: "easeOut",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Dynamic section transition glow */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              opacity: useTransform(scrollYProgress, [0.14, 0.20, 0.85, 0.95], [0, 1, 1, 0]),
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/12 via-purple-500/12 to-cyan-500/12 rounded-full blur-3xl" />
-          </motion.div>
-        </motion.div>
-      )}
     </>
   );
 };
