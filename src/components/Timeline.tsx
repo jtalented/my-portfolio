@@ -129,30 +129,31 @@ const Timeline = () => {
         </motion.div>
 
         {/* Professional Timeline Progress Bar */}
-        <div className="relative mb-16 hidden md:block px-4">
+        <div className="relative mb-24 hidden md:block px-4">
           <div className="relative">
             {/* Timeline dots container with proper spacing */}
             <div className="relative flex" style={{ paddingLeft: '10px', paddingRight: '10px' }}>
               {timelineData.map((item, i) => (
-                <motion.button
+                <button
                   key={i}
                   onClick={() => setIndex(i)}
                   className="group flex flex-col items-center relative z-10"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   style={{
                     position: 'absolute',
                     left: `${(i / (timelineData.length - 1)) * 100}%`,
                     transform: 'translateX(-50%)'
                   }}
                 >
-                  {/* Dot */}
-                  <div
+                  {/* Dot with individual hover effect */}
+                  <motion.div
                     className={`w-5 h-5 rounded-full border-2 shadow-lg transition-all duration-300 ${
                       i <= index 
                         ? 'bg-orange-500 border-orange-400 shadow-orange-500/30' 
                         : 'bg-slate-600 border-slate-500 hover:bg-slate-500 hover:border-slate-400'
                     }`}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    style={{ transformOrigin: 'center center' }}
                   />
                   
                   {/* Year label */}
@@ -165,7 +166,7 @@ const Timeline = () => {
                   >
                     {item.year}
                   </span>
-                </motion.button>
+                </button>
               ))}
             </div>
             
@@ -196,7 +197,7 @@ const Timeline = () => {
         </div>
 
         {/* Mobile Timeline - Simplified dots */}
-        <div className="flex justify-center gap-3 mb-8 md:hidden">
+        <div className="flex justify-center gap-3 mb-16 md:hidden">
           {timelineData.map((_, i) => (
             <motion.button
               key={i}
@@ -206,6 +207,7 @@ const Timeline = () => {
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
+              style={{ transformOrigin: 'center center' }}
             />
           ))}
         </div>

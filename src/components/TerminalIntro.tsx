@@ -96,7 +96,7 @@ const ProfessionalMacBook = () => {
   );
 };
 
-const TerminalIntro = ({ isScrollingFromHero = false }: { isScrollingFromHero?: boolean }) => {
+const TerminalIntro = () => {
   const sentences = [
     'Frontend',
     'Backend',
@@ -131,8 +131,12 @@ const TerminalIntro = ({ isScrollingFromHero = false }: { isScrollingFromHero?: 
 
   useEffect(() => {
     if (isInView && !lastInView) {
-      // Entering view: always fade in from below
+      // Entering view: always fade in from below and reset typing animation
       setAnimState({ opacity: 1, y: 0 });
+      // Reset typing animation to start from beginning
+      setText('');
+      setIndex(0);
+      setIsDeleting(false);
     } else if (!isInView && lastInView) {
       // Leaving view: fade out in scroll direction
       setAnimState(scrollDir === 'down' ? { opacity: 0, y: -200 } : { opacity: 0, y: 200 });
@@ -186,7 +190,7 @@ const TerminalIntro = ({ isScrollingFromHero = false }: { isScrollingFromHero?: 
       <motion.div
         className="absolute top-4 sm:top-8 inset-x-0 flex justify-center z-20"
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: isScrollingFromHero ? 0 : 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div

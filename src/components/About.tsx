@@ -76,7 +76,7 @@ const About = () => {
         </motion.div>
 
         <motion.div 
-          className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-center"
+          className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-start"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
