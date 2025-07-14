@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useInView } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import useResponsive from '../hooks/useResponsive';
-import { useScrollLock } from '../hooks/useScrollLock';
 
 // Professional MacBook Component
 const ProfessionalMacBook = () => {
@@ -97,7 +96,7 @@ const ProfessionalMacBook = () => {
   );
 };
 
-const TerminalIntro = () => {
+const TerminalIntro = ({ isScrollingFromHero = false }: { isScrollingFromHero?: boolean }) => {
   const sentences = [
     'Frontend',
     'Backend',
@@ -111,28 +110,35 @@ const TerminalIntro = () => {
   // Parallax mouse movement
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
 
   // Scroll-based animations for repeated fade-in
-  const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const { lockScroll, unlockScroll } = useScrollLock();
+  const isInView = useInView(sectionRef, { amount: 0.8, once: false });
+  const [scrollDir, setScrollDir] = useState<'up' | 'down'>('down');
+  const [lastInView, setLastInView] = useState(false);
+  const [animState, setAnimState] = useState<{ opacity: number, y: number }>({ opacity: 0, y: 200 });
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrollDir(y > lastY ? 'down' : 'up');
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (isInView && !lastInView) {
+      // Entering view: always fade in from below
+      setAnimState({ opacity: 1, y: 0 });
+    } else if (!isInView && lastInView) {
+      // Leaving view: fade out in scroll direction
+      setAnimState(scrollDir === 'down' ? { opacity: 0, y: -200 } : { opacity: 0, y: 200 });
+    }
+    setLastInView(isInView);
+  }, [isInView, lastInView, scrollDir]);
 
   const responsive = useResponsive();
 
@@ -173,21 +179,21 @@ const TerminalIntro = () => {
   }, [text, isDeleting, index, sentences]);
 
   return (
-    <section ref={sectionRef} id="terminal-intro" className="relative h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
+    <section ref={sectionRef} id="terminal-intro" className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Uses global background - no individual background needed */}
+      
       {/* Upward Scroll Mouse Indicator */}
       <motion.div
         className="absolute top-4 sm:top-8 inset-x-0 flex justify-center z-20"
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.5 }}
+        animate={{ opacity: isScrollingFromHero ? 0 : 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
         <div
           className="flex flex-col items-center text-gray-400 cursor-pointer group"
           onClick={() => {
             const hero = document.getElementById('hero');
             if (hero) {
-              // Lock scroll during animation
-              lockScroll();
               
               const targetPosition = 0;
               const startPosition = window.pageYOffset;
@@ -216,8 +222,7 @@ const TerminalIntro = () => {
                 if (timeElapsed < duration) {
                   requestAnimationFrame(animation);
                 } else {
-                  // Unlock scroll when animation completes
-                  unlockScroll();
+                  
                 }
               };
 
@@ -242,50 +247,17 @@ const TerminalIntro = () => {
           {/* <span className="text-xs mt-2 text-gray-400 group-hover:text-orange-400 transition-colors">Scroll to top</span> */}
         </div>
       </motion.div>
-      {/* Complex background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-850 to-black"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(251,146,60,0.15),transparent_40%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(239,68,68,0.15),transparent_40%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.1),transparent_50%)]"></div>
-      
-      {/* Animated particles */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-orange-400 rounded-full opacity-30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 0.6, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
 
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0" style={{ backgroundSize: responsive.isMobile ? '30px 30px' : responsive.isTablet ? '40px 40px' : '50px 50px' }}></div>
+
+
 
       {/* 3D Laptop - positioned on the right side */}
       {!responsive.isMobile && (
         <motion.div 
           className="absolute right-0 top-0 w-1/2 lg:w-1/2 md:w-1/2 h-full pointer-events-none"
           initial={{ opacity: 0, y: 200 }}
-          animate={{ 
-            opacity: isInView ? 1 : 0, 
-            y: isInView ? 0 : 200 
-          }}
-          transition={{ duration: 2.5, ease: [0.25, 0.1, 0.25, 1] }}
+          animate={animState}
+          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           style={{ transform: 'translateY(-5%)' }}
         >
           <motion.div
@@ -326,17 +298,12 @@ const TerminalIntro = () => {
       <motion.div 
         className="flex w-full h-full items-center justify-center md:justify-start"
         initial={{ opacity: 0, y: 200 }}
-        animate={{ 
-          opacity: isInView ? 1 : 0, 
-          y: isInView ? 0 : 200 
-        }}
-        transition={{ duration: 2.5, ease: [0.25, 0.1, 0.25, 1] }}
+        animate={animState}
+        transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <motion.div 
           className="text-center z-10 px-4 sm:px-6 max-w-4xl lg:max-w-5xl mx-auto md:mx-0 md:text-left"
           style={{ 
-            rotateX, 
-            rotateY, 
             transformStyle: 'preserve-3d', 
             marginLeft: responsive.isMobile ? 0 : responsive.isTablet ? '2vw' : '4vw',
             width: responsive.isMobile ? '100%' : responsive.isTablet ? '60%' : '50%',

@@ -31,16 +31,7 @@ const Contact = () => {
 
   return (
     <section id="contact" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
-      
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(251,146,60,0.08),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(239,68,68,0.08),transparent_50%)]"></div>
-        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-red-500/5 rounded-full blur-3xl"></div>
-      </div>
+      {/* Background handled globally for seamless continuity */}
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Modern header */}

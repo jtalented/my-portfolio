@@ -30,15 +30,7 @@ const About = () => {
 
   return (
     <section id="about" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background with depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
-      
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-red-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/3 rounded-full blur-3xl"></div>
-      </div>
+      {/* Background handled globally for seamless continuity */}
 
       <motion.div className="max-w-7xl mx-auto relative z-10" style={{ y }}>
         {/* Modern header with improved typography */}

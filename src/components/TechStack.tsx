@@ -109,16 +109,8 @@ const TechStack = () => {
 
   return (
     <section id="techstack" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+      {/* Background handled globally for seamless continuity */}
       
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-0 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-0 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/3 rounded-full blur-3xl"></div>
-      </div>
-
       <motion.div className="max-w-7xl mx-auto relative z-10" style={{ y }}>
         {/* Modern header */}
         <motion.div 

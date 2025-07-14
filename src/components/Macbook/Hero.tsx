@@ -1,11 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useTransform, useScroll } from 'framer-motion';
-import LiquidGlassMorphism from './LiquidGlassMorphism';
+import StaticGlassOverlay from './StaticGlassOverlay';
 import useResponsive from '../../hooks/useResponsive';
 import { useScrollLock } from '../../hooks/useScrollLock';
 
-const Hero = () => {
-  const [isScrollingFromHero, setIsScrollingFromHero] = useState(false);
+const Hero = ({ isScrollingFromHero, setIsScrollingFromHero }: { isScrollingFromHero: boolean, setIsScrollingFromHero: (v: boolean) => void }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const responsive = useResponsive();
@@ -69,7 +68,7 @@ const Hero = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, isScrollingFromHero]);
+  }, [lastScrollY, isScrollingFromHero, setIsScrollingFromHero]);
 
 
   const scrollToMainContent = (onComplete?: () => void) => {
@@ -152,68 +151,14 @@ const Hero = () => {
   };
 
   return (
-    <section id="hero" ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-slate-900 via-orange-900/50 to-slate-900"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      />
+    <section id="hero" ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black" style={{ backgroundColor: '#0a0a0a' }}>
+      {/* Keep original black background for Hero section */}
 
-      {/* Dynamic geometric pattern */}
-      <motion.div 
-        className="absolute inset-0"
-        animate={{
-          background: [
-            "radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.12) 0%, transparent 50%)",
-            "radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.08) 0%, transparent 50%)",
-            "radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%)",
-            "radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.12) 0%, transparent 50%)",
-          ]
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
+      {/* Cinematic Fade Trigger - invisible, pinned to bottom of hero */}
+      <div id="cinematic-fade-trigger" className="absolute left-0 right-0 bottom-0 h-24 pointer-events-none" />
 
-      {/* Tech grid overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(251, 146, 60, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(251, 146, 60, 0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-        }}
-      />
-
-      {/* Animated circuit lines */}
-      <div className="absolute inset-0">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent"
-            style={{
-              top: `${20 + i * 15}%`,
-              left: '0%',
-              width: '100%',
-            }}
-            animate={{
-              x: ['-100%', '100%'],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              delay: i * 1.5,
-              ease: "linear",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Liquid Glass Morphism */}
-      <LiquidGlassMorphism />
+      {/* Static Glass Overlay */}
+      <StaticGlassOverlay />
 
       {/* Modern Hero Content */}
       <motion.div
@@ -364,8 +309,8 @@ const Hero = () => {
         <motion.div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.5 }}
+          animate={{ opacity: isScrollingFromHero ? 0 : 1 }}
+          transition={{ duration: 0.5 }}
         >
           <motion.div
             className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center"
@@ -382,9 +327,6 @@ const Hero = () => {
       </motion.div>
 
       {/* Ambient lighting effects */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '4s' }} />
     </section>
   );
 };
