@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://jtalented.github.io/my-portfolio",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -47,6 +46,6 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^7.0.4"
   }
 }

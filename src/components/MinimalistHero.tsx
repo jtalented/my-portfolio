@@ -1,10 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import useResponsive from '../hooks/useResponsive';
 
 const MinimalistHero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isComplete, setIsComplete] = useState(false);
   const responsive = useResponsive();
   
   const { scrollYProgress } = useScroll({
@@ -26,7 +25,6 @@ const MinimalistHero = () => {
   
   // Phase 2: Square rotates as we zoom into it
   const logoX = useTransform(scrollYProgress, [0, 1], [0, 0]); // Stay centered
-  const logoY = useTransform(scrollYProgress, [0, 0.5, 1], [0, 50, 100]); // Move down slightly during scroll to help with zoom centering
   const logoScale = useTransform(scrollYProgress, [0, 0.3, 0.6, 1], [1, 1, 1, 1]); // Keep square same size, scene scales
   const logoRotate = useTransform(scrollYProgress, [0, 0.4, 0.8, 1], [0, 90, 270, 360]);
   
@@ -51,10 +49,9 @@ const MinimalistHero = () => {
   // Hero fade out for final transition  
   const heroFadeOut = useTransform(scrollYProgress, [0.85, 0.98, 1], [1, 0.3, 0]);
 
-  // Check if animation is complete and track zooming state
+  // Track zooming state
   useEffect(() => {
     return scrollYProgress.onChange((value) => {
-      setIsComplete(value >= 0.95);
       setIsZooming(value > 0.05 && value < 0.95);
     });
   }, [scrollYProgress]);

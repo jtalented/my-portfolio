@@ -9,6 +9,8 @@ import Resume from './components/Resume';
 import Contact from './components/Contact';
 import { motion } from 'framer-motion';
 import CursorFollower from './components/CursorFollower';
+import Navbar from './components/Navbar';
+import EndOfScrollGradient from './components/EndOfScrollGradient';
 import useResponsive from './hooks/useResponsive';
 
 
@@ -19,10 +21,14 @@ const App = () => {
   return (
     <div className="relative">
       <CursorFollower />
+      <Navbar />
+      <EndOfScrollGradient />
       <Layout>
 
         {/* New Minimalist Hero with Scroll-Locked Transitions */}
-        <MinimalistHero />
+        <div id="hero">
+          <MinimalistHero />
+        </div>
 
         {/* Vibrant background for main content sections - restored */}
         <div className="fixed inset-0 -z-10 pointer-events-none" style={{ backgroundColor: '#0a0a0a' }}>
@@ -100,6 +106,7 @@ const App = () => {
 
             {/* Tech Stack */}
             <motion.section
+              id="tech-stack"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -111,6 +118,7 @@ const App = () => {
 
             {/* Projects */}
             <motion.section
+              id="projects"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -122,6 +130,7 @@ const App = () => {
 
             {/* Resume */}
             <motion.section
+              id="resume"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -144,6 +153,7 @@ const App = () => {
 
             {/* Contact */}
             <motion.section
+              id="contact"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -155,6 +165,7 @@ const App = () => {
 
           </div>
         </motion.section>
+
       </Layout>
     </div>
   );

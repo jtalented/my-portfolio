@@ -32,27 +32,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="relative z-10">
         {children}
       </main>
-
-      {/* Modern footer */}
-      <footer className="relative z-10 border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="flex flex-col items-center justify-center gap-6 text-center">
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">JA</span>
-              </div>
-              <div>
-                <p className="text-slate-300 font-medium">&copy; {new Date().getFullYear()} Jayden Allen</p>
-                <p className="text-slate-500 text-sm">Full Stack Developer</p>
-              </div>
-            </div>
-            
-            <p className="text-slate-500 text-sm">
-              Built with React, TypeScript & Tailwind CSS
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

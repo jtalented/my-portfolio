@@ -185,75 +185,6 @@ const TerminalIntro = () => {
   return (
     <section ref={sectionRef} id="terminal-intro" className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Uses global background - no individual background needed */}
-      
-      {/* Upward Scroll Mouse Indicator */}
-      <motion.div
-        className="absolute top-4 sm:top-8 inset-x-0 flex justify-center z-20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div
-          className="flex flex-col items-center text-gray-400 cursor-pointer group"
-          onClick={() => {
-            const hero = document.getElementById('hero');
-            if (hero) {
-              
-              const targetPosition = 0;
-              const startPosition = window.pageYOffset;
-              const distance = targetPosition - startPosition;
-              const duration = 4000; // 4 seconds for slower scroll
-              let start: number | null = null;
-
-              // Custom ease: slow down more in the last half
-              const customEase = (t: number, b: number, c: number, d: number) => {
-                t /= d;
-                if (t < 0.7) {
-                  // First 70%: normal cubic ease
-                  return c * (t * t * (3 - 2 * t)) + b;
-                } else {
-                  // Last 30%: slow down more
-                  const slowT = (t - 0.7) / 0.3;
-                  return c * (0.7 * 0.7 * (3 - 2 * 0.7) + (1 - 0.7 * 0.7 * (3 - 2 * 0.7)) * (slowT * slowT * (3 - 2 * slowT))) + b;
-                }
-              };
-
-              const animation = (currentTime: number) => {
-                if (start === null) start = currentTime;
-                const timeElapsed = currentTime - start;
-                const run = customEase(Math.min(timeElapsed, duration), startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) {
-                  requestAnimationFrame(animation);
-                } else {
-                  
-                }
-              };
-
-              requestAnimationFrame(animation);
-            }
-          }}
-        >
-          {/* Mouse icon with upward animation */}
-          <motion.div
-            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center items-start bg-gray-800/50 backdrop-blur-sm group-hover:border-orange-400 transition-colors"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ position: 'relative' }}
-          >
-            <motion.div
-              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.div>
-          {/* Optional label below the icon */}
-          {/* <span className="text-xs mt-2 text-gray-400 group-hover:text-orange-400 transition-colors">Scroll to top</span> */}
-        </div>
-      </motion.div>
-
-
-
 
       {/* 3D Laptop - positioned on the right side */}
       {!responsive.isMobile && (
@@ -387,7 +318,7 @@ const TerminalIntro = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator with mouse animation */}
       <motion.div
         className="absolute bottom-4 sm:bottom-8 inset-x-0 flex justify-center"
         initial={{ opacity: 0, y: 20 }}
@@ -402,14 +333,25 @@ const TerminalIntro = () => {
           >
             Scroll to explore
           </motion.span>
+          
+          {/* Mouse animation with downward scroll */}
           <motion.div
+            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center items-start bg-gray-800/50 backdrop-blur-sm hover:border-orange-400 transition-colors cursor-pointer"
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="p-2 rounded-full border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm"
+            onClick={() => {
+              // Scroll to the next section (About)
+              const about = document.getElementById('about');
+              if (about) {
+                about.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
+            <motion.div
+              className="w-1 h-3 bg-gray-400 rounded-full mt-2 hover:bg-orange-400 transition-colors"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </motion.div>
         </div>
       </motion.div>
