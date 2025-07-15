@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const EndOfScrollGradient = () => {
-  const [isAtBottom, setIsAtBottom] = useState(false);
   const [overScrollIntensity, setOverScrollIntensity] = useState(0);
   const [showEffect, setShowEffect] = useState(false);
 
@@ -18,7 +17,6 @@ const EndOfScrollGradient = () => {
       
       // Check if we're at the bottom
       const atBottom = scrollY + windowHeight >= documentHeight - 10;
-      setIsAtBottom(atBottom);
 
       // If at bottom and trying to scroll down further
       if (atBottom && scrollY >= lastScrollY) {
