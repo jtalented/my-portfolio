@@ -16,7 +16,7 @@ import useResponsive from './hooks/useResponsive';
 
 const App = () => {
   const responsive = useResponsive();
-  const viewportAmount = responsive.isMobile ? 0.1 : 0.4;
+  const viewportAmount = responsive.isMobile ? 0.1 : 0.3;
 
   return (
     <div className="relative">

@@ -52,8 +52,8 @@ const EndOfScrollGradient = () => {
         const documentHeight = document.documentElement.scrollHeight;
         
         if (scrollY + windowHeight >= documentHeight - 10) {
-          // Prevent default scroll behavior when at bottom
-          e.preventDefault();
+          // Don't prevent default scroll - let natural scrolling happen
+          // e.preventDefault(); // REMOVED - this was blocking scroll
           
           overScrollAttempts += 1;
           const intensity = Math.min(overScrollAttempts * 0.05, 1);
