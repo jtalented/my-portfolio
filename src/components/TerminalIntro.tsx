@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform, animate, useScroll } from 'framer-motion';
+import { motion, useMotionValue, useInView } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import useResponsive from '../hooks/useResponsive';
-import { useScrollLock } from '../hooks/useScrollLock';
 
 // Professional MacBook Component
 const ProfessionalMacBook = () => {
@@ -111,28 +110,39 @@ const TerminalIntro = () => {
   // Parallax mouse movement
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
 
   // Scroll-based animations for repeated fade-in
-  const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const { lockScroll, unlockScroll } = useScrollLock();
+  const isInView = useInView(sectionRef, { amount: 0.8, once: false });
+  const [scrollDir, setScrollDir] = useState<'up' | 'down'>('down');
+  const [lastInView, setLastInView] = useState(false);
+  const [animState, setAnimState] = useState<{ opacity: number, y: number }>({ opacity: 0, y: 200 });
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrollDir(y > lastY ? 'down' : 'up');
+      lastY = y;
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (isInView && !lastInView) {
+      // Entering view: always fade in from below and reset typing animation
+      setAnimState({ opacity: 1, y: 0 });
+      // Reset typing animation to start from beginning
+      setText('');
+      setIndex(0);
+      setIsDeleting(false);
+    } else if (!isInView && lastInView) {
+      // Leaving view: fade out in scroll direction
+      setAnimState(scrollDir === 'down' ? { opacity: 0, y: -200 } : { opacity: 0, y: 200 });
+    }
+    setLastInView(isInView);
+  }, [isInView, lastInView, scrollDir]);
 
   const responsive = useResponsive();
 
@@ -173,119 +183,16 @@ const TerminalIntro = () => {
   }, [text, isDeleting, index, sentences]);
 
   return (
-    <section ref={sectionRef} id="terminal-intro" className="relative h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
-      {/* Upward Scroll Mouse Indicator */}
-      <motion.div
-        className="absolute top-4 sm:top-8 inset-x-0 flex justify-center z-20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.5 }}
-      >
-        <div
-          className="flex flex-col items-center text-gray-400 cursor-pointer group"
-          onClick={() => {
-            const hero = document.getElementById('hero');
-            if (hero) {
-              // Lock scroll during animation
-              lockScroll();
-              
-              const targetPosition = 0;
-              const startPosition = window.pageYOffset;
-              const distance = targetPosition - startPosition;
-              const duration = 4000; // 4 seconds for slower scroll
-              let start: number | null = null;
-
-              // Custom ease: slow down more in the last half
-              const customEase = (t: number, b: number, c: number, d: number) => {
-                t /= d;
-                if (t < 0.7) {
-                  // First 70%: normal cubic ease
-                  return c * (t * t * (3 - 2 * t)) + b;
-                } else {
-                  // Last 30%: slow down more
-                  const slowT = (t - 0.7) / 0.3;
-                  return c * (0.7 * 0.7 * (3 - 2 * 0.7) + (1 - 0.7 * 0.7 * (3 - 2 * 0.7)) * (slowT * slowT * (3 - 2 * slowT))) + b;
-                }
-              };
-
-              const animation = (currentTime: number) => {
-                if (start === null) start = currentTime;
-                const timeElapsed = currentTime - start;
-                const run = customEase(Math.min(timeElapsed, duration), startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) {
-                  requestAnimationFrame(animation);
-                } else {
-                  // Unlock scroll when animation completes
-                  unlockScroll();
-                }
-              };
-
-              requestAnimationFrame(animation);
-            }
-          }}
-        >
-          {/* Mouse icon with upward animation */}
-          <motion.div
-            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center items-start bg-gray-800/50 backdrop-blur-sm group-hover:border-orange-400 transition-colors"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ position: 'relative' }}
-          >
-            <motion.div
-              className="w-1 h-3 bg-gray-400 rounded-full mt-2"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </motion.div>
-          {/* Optional label below the icon */}
-          {/* <span className="text-xs mt-2 text-gray-400 group-hover:text-orange-400 transition-colors">Scroll to top</span> */}
-        </div>
-      </motion.div>
-      {/* Complex background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-850 to-black"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(251,146,60,0.15),transparent_40%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(239,68,68,0.15),transparent_40%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.1),transparent_50%)]"></div>
-      
-      {/* Animated particles */}
-      <div className="absolute inset-0">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-orange-400 rounded-full opacity-30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 0.6, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0" style={{ backgroundSize: responsive.isMobile ? '30px 30px' : responsive.isTablet ? '40px 40px' : '50px 50px' }}></div>
+    <section ref={sectionRef} id="terminal-intro" className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Uses global background - no individual background needed */}
 
       {/* 3D Laptop - positioned on the right side */}
       {!responsive.isMobile && (
         <motion.div 
           className="absolute right-0 top-0 w-1/2 lg:w-1/2 md:w-1/2 h-full pointer-events-none"
           initial={{ opacity: 0, y: 200 }}
-          animate={{ 
-            opacity: isInView ? 1 : 0, 
-            y: isInView ? 0 : 200 
-          }}
-          transition={{ duration: 2.5, ease: [0.25, 0.1, 0.25, 1] }}
+          animate={animState}
+          transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           style={{ transform: 'translateY(-5%)' }}
         >
           <motion.div
@@ -326,17 +233,12 @@ const TerminalIntro = () => {
       <motion.div 
         className="flex w-full h-full items-center justify-center md:justify-start"
         initial={{ opacity: 0, y: 200 }}
-        animate={{ 
-          opacity: isInView ? 1 : 0, 
-          y: isInView ? 0 : 200 
-        }}
-        transition={{ duration: 2.5, ease: [0.25, 0.1, 0.25, 1] }}
+        animate={animState}
+        transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <motion.div 
           className="text-center z-10 px-4 sm:px-6 max-w-4xl lg:max-w-5xl mx-auto md:mx-0 md:text-left"
           style={{ 
-            rotateX, 
-            rotateY, 
             transformStyle: 'preserve-3d', 
             marginLeft: responsive.isMobile ? 0 : responsive.isTablet ? '2vw' : '4vw',
             width: responsive.isMobile ? '100%' : responsive.isTablet ? '60%' : '50%',
@@ -416,7 +318,7 @@ const TerminalIntro = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator with mouse animation */}
       <motion.div
         className="absolute bottom-4 sm:bottom-8 inset-x-0 flex justify-center"
         initial={{ opacity: 0, y: 20 }}
@@ -431,14 +333,25 @@ const TerminalIntro = () => {
           >
             Scroll to explore
           </motion.span>
+          
+          {/* Mouse animation with downward scroll */}
           <motion.div
+            className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center items-start bg-gray-800/50 backdrop-blur-sm hover:border-orange-400 transition-colors cursor-pointer"
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="p-2 rounded-full border border-gray-600/50 bg-gray-800/50 backdrop-blur-sm"
+            onClick={() => {
+              // Scroll to the next section (About)
+              const about = document.getElementById('about');
+              if (about) {
+                about.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
+            <motion.div
+              className="w-1 h-3 bg-gray-400 rounded-full mt-2 hover:bg-orange-400 transition-colors"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </motion.div>
         </div>
       </motion.div>

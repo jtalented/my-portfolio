@@ -1,6 +1,5 @@
 import Layout from './components/Layout';
-import Hero from './components/Macbook/Hero';
-import FloatingMacBook from './components/FloatingMacBook';
+import MinimalistHero from './components/MinimalistHero';
 import TerminalIntro from './components/TerminalIntro';
 import About from './components/About';
 import TechStack from './components/TechStack';
@@ -8,108 +7,86 @@ import Projects from './components/Projects';
 import Timeline from './components/Timeline';
 import Resume from './components/Resume';
 import Contact from './components/Contact';
-import useIsMobile from './hooks/useIsMobile';
-import { motion, useScroll, useTransform, useVelocity } from 'framer-motion';
-import LiquidGlassMorphism from './components/Macbook/LiquidGlassMorphism';
-import { useMemo } from 'react';
-import { useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
+import CursorFollower from './components/CursorFollower';
+import Navbar from './components/Navbar';
+import EndOfScrollGradient from './components/EndOfScrollGradient';
+import useResponsive from './hooks/useResponsive';
+
 
 const App = () => {
-  const isMobile = useIsMobile();
-  const { scrollYProgress } = useScroll({ layoutEffect: false });
-  const scrollVelocity = useVelocity(scrollYProgress);
-
-  // Call useTransform and useSpring at the top level
-  const glassOpacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 0.5, 0]);
-  const smoothGlassOpacity = useSpring(glassOpacity, { stiffness: 80, damping: 30 });
-
-  // Memoize mousePosition
-  const mousePosition = useMemo(() => ({ x: 0, y: 0 }), []);
+  const responsive = useResponsive();
+  const viewportAmount = responsive.isMobile ? 0.1 : 0.3;
 
   return (
     <div className="relative">
+      <CursorFollower />
+      <Navbar />
+      <EndOfScrollGradient />
       <Layout>
-        {/* Glass effects that work on both mobile and desktop */}
-        <LiquidGlassMorphism 
-          mousePosition={mousePosition}
-          scrollProgress={scrollYProgress}
-          opacity={smoothGlassOpacity}
-        />
 
-        {/* Professional Hero Section */}
-        <Hero />
+        {/* New Minimalist Hero with Scroll-Locked Transitions */}
+        <div id="hero">
+          <MinimalistHero />
+        </div>
 
-        {/* Floating MacBook that follows throughout the page */}
-        <FloatingMacBook />
-
-        {/* Glass Break Transition Space */}
-        <motion.section 
-          id="glass-transition" 
-          className="relative z-10 min-h-screen flex items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          {/* Unified background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
+        {/* Vibrant background for main content sections - restored */}
+        <div className="fixed inset-0 -z-10 pointer-events-none" style={{ backgroundColor: '#0a0a0a' }}>
+          {/* Rich, vibrant background gradients */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-850 to-black"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(251,146,60,0.25),transparent_40%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(239,68,68,0.25),transparent_40%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(236,72,153,0.18),transparent_50%)]"></div>
           
-          {/* Subtle ambient pattern */}
-          <div 
-            className="absolute inset-0 opacity-[0.02]"
-            style={{
-              backgroundImage: `
-                radial-gradient(circle at 20% 20%, rgba(251, 146, 60, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.2) 0%, transparent 50%)
-              `,
-              backgroundSize: '1200px 1200px, 1000px 1000px',
-            }}
-          />
-          
-          {/* Elegant transition indicator */}
-          <motion.div
-            className="relative z-10 text-center opacity-40"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 0.4, scale: 1 }}
-            transition={{ duration: 1.5 }}
-            viewport={{ once: true }}
-          >
-            <div className="w-40 h-px bg-gradient-to-r from-transparent via-slate-400/60 to-transparent mx-auto mb-4" />
-            <p className="text-slate-400 text-sm font-mono tracking-wider"></p>
-            <div className="w-40 h-px bg-gradient-to-r from-transparent via-slate-400/60 to-transparent mx-auto mt-4" />
-          </motion.div>
-        </motion.section>
+          {/* Animated particles */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-orange-400 rounded-full opacity-30"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  scale: [0, 1, 0],
+                  opacity: [0, 0.6, 0],
+                  y: [0, -100, 0],
+                }}
+                transition={{
+                  duration: Math.random() * 3 + 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </div>
+        </div>
 
         {/* Main Content with Professional Transitions */}
         <motion.section 
           id="main-content" 
-          className="relative z-20"
-          initial={{ opacity: 0 }}
+          className="relative z-10"
+          style={{ marginTop: '0vh' }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
         >
-          {/* Unified premium background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
-          
-          {/* Subtle ambient background pattern */}
-          <div 
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `
-                radial-gradient(circle at 20% 20%, rgba(251, 146, 60, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(236, 72, 153, 0.2) 0%, transparent 50%)
-              `,
-              backgroundSize: '1200px 1200px, 1000px 1000px, 800px 800px',
-            }}
-          />
 
           {/* Professional content sections with seamless transitions */}
           <div className="relative z-10">
+            
+            {/* Spacer to give TerminalIntro more room before coming into focus */}
+            <div className="h-[50vh]"></div>
             
             {/* Terminal Introduction */}
             <motion.section
               id="terminal-intro"
               className="relative min-h-screen flex items-center justify-center w-full"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              viewport={{ amount: viewportAmount }}
             >
               <div className="w-full">
                 <TerminalIntro />
@@ -117,78 +94,78 @@ const App = () => {
             </motion.section>
 
             {/* About Section */}
-            <motion.div
+            <motion.section
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <About />
-            </motion.div>
+            </motion.section>
 
             {/* Tech Stack */}
-            <motion.div
+            <motion.section
+              id="tech-stack"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <TechStack />
-            </motion.div>
+            </motion.section>
 
             {/* Projects */}
-            <motion.div
+            <motion.section
+              id="projects"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <Projects />
-            </motion.div>
+            </motion.section>
 
             {/* Resume */}
-            <motion.div
+            <motion.section
+              id="resume"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <Resume />
-            </motion.div>
+            </motion.section>
 
             {/* Timeline */}
-            <motion.div
+            <motion.section
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <Timeline />
-            </motion.div>
+            </motion.section>
 
             {/* Contact */}
-            <motion.div
+            <motion.section
+              id="contact"
               className="relative w-full"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ once: true }}
+              viewport={{ amount: viewportAmount }}
             >
               <Contact />
-            </motion.div>
+            </motion.section>
 
           </div>
-
-          {/* Subtle ambient lighting effects */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/3 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-red-500/3 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }} />
-          <div className="absolute top-3/4 left-1/3 w-64 h-64 bg-pink-500/3 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '6s' }} />
         </motion.section>
+
       </Layout>
     </div>
   );

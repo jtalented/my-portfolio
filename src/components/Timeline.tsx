@@ -1,6 +1,6 @@
 // components/Timeline.tsx
 import { useState } from 'react';
-import { motion, AnimatePresence, Variants, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import useResponsive from '../hooks/useResponsive';
 
@@ -32,7 +32,7 @@ const timelineData = [
     year: '2020–2025',
     title: 'B.S. Computer Science – BYU',
     description:
-      'Studied systems, deep learning, and full-stack development. GPA: 3.56.',
+      'Studied systems, deep learning, and full-stack development. Graduated December 2025. GPA: 3.56.',
     category: 'Education',
     icon: '🎓'
   },
@@ -45,10 +45,10 @@ const timelineData = [
     icon: '💼'
   },
   {
-    year: '2025–Present',
+    year: '2025',
     title: 'Full Stack Developer – Fund Launch',
     description:
-      'Built a financial education platform with React/Next.js, Supabase, and secure cloud infrastructure.',
+      'Built a financial education platform with React/Next.js, Supabase, and secure cloud infrastructure. Contract ended August 2025.',
     category: 'Work',
     icon: '🚀'
   },
@@ -61,7 +61,7 @@ const categoryColors = {
   Work: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
 };
 
-const cardVariants: Variants = {
+const cardVariants = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   exit: { opacity: 0, y: -30, transition: { duration: 0.3 } },
@@ -84,16 +84,7 @@ const Timeline = () => {
 
   return (
     <section id="timeline" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
-      
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(251,146,60,0.08),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(239,68,68,0.08),transparent_50%)]"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-red-500/5 rounded-full blur-3xl"></div>
-      </div>
+      {/* Background handled globally for seamless continuity */}
 
       <motion.div className="max-w-6xl mx-auto relative z-10" style={{ y }}>
         {/* Modern header */}
@@ -138,30 +129,31 @@ const Timeline = () => {
         </motion.div>
 
         {/* Professional Timeline Progress Bar */}
-        <div className="relative mb-16 hidden md:block px-4">
+        <div className="relative mb-24 hidden md:block px-4">
           <div className="relative">
             {/* Timeline dots container with proper spacing */}
             <div className="relative flex" style={{ paddingLeft: '10px', paddingRight: '10px' }}>
               {timelineData.map((item, i) => (
-                <motion.button
+                <button
                   key={i}
                   onClick={() => setIndex(i)}
                   className="group flex flex-col items-center relative z-10"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   style={{
                     position: 'absolute',
                     left: `${(i / (timelineData.length - 1)) * 100}%`,
                     transform: 'translateX(-50%)'
                   }}
                 >
-                  {/* Dot */}
-                  <div
+                  {/* Dot with individual hover effect */}
+                  <motion.div
                     className={`w-5 h-5 rounded-full border-2 shadow-lg transition-all duration-300 ${
                       i <= index 
                         ? 'bg-orange-500 border-orange-400 shadow-orange-500/30' 
                         : 'bg-slate-600 border-slate-500 hover:bg-slate-500 hover:border-slate-400'
                     }`}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    style={{ transformOrigin: 'center center' }}
                   />
                   
                   {/* Year label */}
@@ -174,7 +166,7 @@ const Timeline = () => {
                   >
                     {item.year}
                   </span>
-                </motion.button>
+                </button>
               ))}
             </div>
             
@@ -205,7 +197,7 @@ const Timeline = () => {
         </div>
 
         {/* Mobile Timeline - Simplified dots */}
-        <div className="flex justify-center gap-3 mb-8 md:hidden">
+        <div className="flex justify-center gap-3 mb-16 md:hidden">
           {timelineData.map((_, i) => (
             <motion.button
               key={i}
@@ -215,6 +207,7 @@ const Timeline = () => {
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
+              style={{ transformOrigin: 'center center' }}
             />
           ))}
         </div>

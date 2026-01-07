@@ -30,15 +30,7 @@ const About = () => {
 
   return (
     <section id="about" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background with depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
-      
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-red-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/3 rounded-full blur-3xl"></div>
-      </div>
+      {/* Background handled globally for seamless continuity */}
 
       <motion.div className="max-w-7xl mx-auto relative z-10" style={{ y }}>
         {/* Modern header with improved typography */}
@@ -84,7 +76,7 @@ const About = () => {
         </motion.div>
 
         <motion.div 
-          className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-center"
+          className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-start"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -105,7 +97,7 @@ const About = () => {
               >
                 <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-orange-500 via-red-500 to-pink-500 rounded-full"></div>
                 <p>
-                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer, student, and builder who thrives on solving complex problems with elegant, scalable solutions. Currently pursuing Computer Science at BYU, where I've developed expertise in systems design, full-stack engineering, and innovative problem-solving.
+                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer and builder who thrives on solving complex problems with elegant, scalable solutions. I recently graduated with a degree in Computer Science from BYU, where I developed expertise in systems design, full-stack engineering, and innovative problem-solving.
                 </p>
               </motion.div>
               

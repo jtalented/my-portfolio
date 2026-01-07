@@ -1,19 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
-  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot, FaAws, FaStripe, FaPowerOff, FaCloud, FaDatabase, FaCloudDownloadAlt, FaNetworkWired, FaKey, FaCogs, FaEnvelope, FaCodeBranch, FaTerminal, FaCloudUploadAlt
+  FaReact, FaNodeJs, FaGitAlt, FaJava, FaPython, FaTools, FaRobot, FaAws, FaStripe, FaPowerOff, FaDatabase, FaNetworkWired, FaKey, FaCogs, FaEnvelope, FaTerminal
 } from 'react-icons/fa';
 import {
-  SiSwagger, SiOpenapiinitiative, SiWorkplace, SiInformatica, SiOracle, SiMysql, SiPostgresql, SiMongodb, SiSqlite, SiSupabase, SiSalesforce, SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite, SiExpress, SiRedis, SiFirebase, SiVercel, SiJest, SiCypress, SiFigma, SiInsomnia, SiGraphql, SiAuth0, SiPython, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiCplusplus
+  SiSwagger, SiOpenapiinitiative, SiWorkplace, SiInformatica, SiOracle, SiMysql, SiPostgresql, SiMongodb, SiSqlite, SiSupabase, SiSalesforce, SiJupyter, SiPostman, SiTailwindcss, SiNextdotjs, SiVite, SiExpress, SiGraphql, SiAuth0, SiTypescript, SiJavascript, SiHtml5, SiCss3, SiCplusplus
 } from 'react-icons/si';
-import useResponsive from '../hooks/useResponsive';
-
-interface TechStackItem {
-  name: string;
-  category: string;
-  icon: () => JSX.Element;
-  proficiency: number;
-}
 
 const techStack = {
   'Frontend': [
@@ -88,7 +80,6 @@ const techStack = {
 
 const TechStack = () => {
   const [activeCategory, setActiveCategory] = useState('Frontend');
-  const responsive = useResponsive();
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
@@ -118,16 +109,8 @@ const TechStack = () => {
 
   return (
     <section id="techstack" className="relative py-20 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
-      {/* Premium background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950"></div>
+      {/* Background handled globally for seamless continuity */}
       
-      {/* Sophisticated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-0 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-0 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/3 rounded-full blur-3xl"></div>
-      </div>
-
       <motion.div className="max-w-7xl mx-auto relative z-10" style={{ y }}>
         {/* Modern header */}
         <motion.div 
@@ -204,7 +187,7 @@ const TechStack = () => {
           viewport={{ once: true }}
         >
           <AnimatePresence mode="wait">
-            {techStack[activeCategory as keyof typeof techStack].map((tech, index) => (
+            {techStack[activeCategory as keyof typeof techStack].map((tech) => (
               <motion.div
                 key={tech.name}
                 className="group relative"
