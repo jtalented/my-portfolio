@@ -32,7 +32,7 @@ const timelineData = [
     year: '2020–2025',
     title: 'B.S. Computer Science – BYU',
     description:
-      'Studied systems, deep learning, and full-stack development. GPA: 3.56.',
+      'Studied systems, deep learning, and full-stack development. Graduated December 2025. GPA: 3.56.',
     category: 'Education',
     icon: '🎓'
   },
@@ -45,10 +45,10 @@ const timelineData = [
     icon: '💼'
   },
   {
-    year: '2025–Present',
+    year: '2025',
     title: 'Full Stack Developer – Fund Launch',
     description:
-      'Built a financial education platform with React/Next.js, Supabase, and secure cloud infrastructure.',
+      'Built a financial education platform with React/Next.js, Supabase, and secure cloud infrastructure. Contract ended August 2025.',
     category: 'Work',
     icon: '🚀'
   },

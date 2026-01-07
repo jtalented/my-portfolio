@@ -42,42 +42,84 @@ const getTechIcon = (tech: string) => {
 const staticProjects: Project[] = [
   {
     id: 1,
-    name: 'March Madness Prediction Web App',
-    description: 'A data-driven NCAA bracket prediction tool built with modern web technologies and custom machine learning.',
+    name: 'HasteAPI',
+    description: 'A full-stack AI SaaS platform enabling users to automatically generate functional API endpoints via natural language using AI.',
     sections: [
       {
         heading: '🔧 Tech Stack',
         items: [
-          'Frontend: React.js (TypeScript)',
-          'Backend: Flask API with Python',
-          'ML Model: Trained on historical March Madness data (Kaggle)',
+          'Full-stack SaaS architecture',
+          'AI-powered natural language processing',
+          'Multi-provider API management system',
         ],
       },
       {
         heading: '📊 Features',
         items: [
-          'Machine learning-based tournament prediction',
-          'API endpoints for serving bracket logic',
-          'Interactive bracket builder UI',
+          'Secure API key management with analytics and rate limiting',
+          'Cost controls and advanced configuration tools',
+          'API versioning and automated documentation',
         ],
       },
       {
-        heading: '🛠️ Future Plans',
+        heading: '🚀 Highlights',
         items: [
-          'Visualize predictions with confidence levels',
-          'Enable user-specific predictions and saving',
-          'Deploy model with scalable cloud infrastructure',
+          'Architected and launched complete SaaS platform',
+          'Engineered secure multi-provider system',
+          'Created comprehensive API system with versioning',
         ],
       },
     ],
-    image_url: '',
-    github_url: 'https://github.com/jtalented',
-    tech_stack: ['React', 'TypeScript', 'Python', 'Flask'],
+    image_url: `${import.meta.env.BASE_URL}images/HasteAPI.png`,
+    github_url: '',
+    live_demo_url: 'https://www.hasteapi.com',
+    tech_stack: ['React', 'Next.js', 'TypeScript', 'Node.js', 'API Integration'],
     featured: true,
     category: 'Full Stack'
   },
   {
     id: 2,
+    name: 'The AD Grid',
+    description: 'A live, scalable ad grid platform (10,000×10,000 coordinate system) enabling users to purchase and display custom ads.',
+    sections: [
+      {
+        heading: '🛠 Technologies Used',
+        items: [
+          'PostgreSQL with optimized indexing',
+          'Stripe payment integration',
+          'Leaflet.js for interactive mapping',
+          'Vercel deployment',
+        ],
+      },
+      {
+        heading: '💡 Features',
+        items: [
+          'Fast and scalable response times with lazy loading',
+          'Intelligent gap filling algorithms',
+          'Secure payment validation and fraud prevention',
+          'Real-time webhook handling',
+        ],
+      },
+      {
+        heading: '🔒 Security & Tools',
+        items: [
+          'Row Level Security (RLS) implementation',
+          'Content Security Policies (CSPs)',
+          'SVG upload functionality',
+          'Analytics and moderation tools',
+          'Accessibility features',
+        ],
+      },
+    ],
+    image_url: `${import.meta.env.BASE_URL}images/THEADGRID.png`,
+    github_url: '',
+    live_demo_url: 'https://www.theadgrid.com',
+    tech_stack: ['React', 'Next.js', 'TypeScript', 'PostgreSQL', 'Stripe', 'Vercel'],
+    featured: true,
+    category: 'Full Stack'
+  },
+  {
+    id: 3,
     name: 'Automated Video Compiler',
     description: 'A Python-powered pipeline that compiles daily trending video segments using social media APIs, editing libraries, and automation tools.',
     sections: [
@@ -112,11 +154,12 @@ const staticProjects: Project[] = [
     category: 'Backend'
   },
   {
-    id: 3,
+    id: 4,
     name: 'Financial Education Platform',
     description: 'Built a comprehensive financial education platform with React/Next.js, Supabase, and secure cloud infrastructure for Fund Launch.',
-    image_url: `${import.meta.env.BASE_URL}/images/Fund_Launch_Lock.png`,
+    image_url: `${import.meta.env.BASE_URL}images/Fund_Launch_Lock.png`,
     github_url: '',
+    live_demo_url: 'https://app.fundlaunch.com',
     tech_stack: ['React', 'Next.js', 'Supabase', 'TypeScript'],
     category: 'Full Stack'
   }
@@ -375,7 +418,7 @@ const Projects = () => {
                             whileTap={{ scale: 0.95 }}
                           >
                             <FaExternalLinkAlt className="text-sm" />
-                            <span className="text-sm font-medium">Live Demo</span>
+                            <span className="text-sm font-medium">Visit Site</span>
                           </motion.a>
                         )}
                       </div>
