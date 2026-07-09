@@ -97,7 +97,7 @@ const About = () => {
               >
                 <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-orange-500 via-red-500 to-pink-500 rounded-full"></div>
                 <p>
-                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer and builder who thrives on solving complex problems with elegant, scalable solutions. I recently graduated with a degree in Computer Science from BYU, where I developed expertise in systems design, full-stack engineering, and innovative problem-solving.
+                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer and builder who thrives on solving complex problems with elegant, scalable solutions. I recently graduated with a degree in Computer Science, where I developed expertise in systems design, full-stack engineering, and innovative problem-solving.
                 </p>
               </motion.div>
               

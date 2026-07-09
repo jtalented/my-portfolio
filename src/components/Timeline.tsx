@@ -30,7 +30,7 @@ const timelineData = [
   },
   {
     year: '2020–2025',
-    title: 'B.S. Computer Science – BYU',
+    title: 'B.S. Computer Science',
     description:
       'Studied systems, deep learning, and full-stack development. Graduated December 2025. GPA: 3.56.',
     category: 'Education',
