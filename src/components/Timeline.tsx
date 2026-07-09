@@ -38,7 +38,7 @@ const timelineData = [
   },
   {
     year: '2023–2025',
-    title: 'Full Stack Developer – BYU Office of IT',
+    title: 'Full Stack Developer – Office of Information Technology',
     description:
       'Led systems integration, mentored dev teams, and collaborated with cross-functional partners.',
     category: 'Work',
