@@ -13,6 +13,7 @@ import Navbar from './components/Navbar';
 import EndOfScrollGradient from './components/EndOfScrollGradient';
 import useResponsive from './hooks/useResponsive';
 
+const SHOW_RESUME_SECTION = false;
 
 const App = () => {
   const responsive = useResponsive();
@@ -128,17 +129,18 @@ const App = () => {
               <Projects />
             </motion.section>
 
-            {/* Resume */}
-            <motion.section
-              id="resume"
-              className="relative w-full"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              viewport={{ amount: viewportAmount }}
-            >
-              <Resume />
-            </motion.section>
+            {SHOW_RESUME_SECTION && (
+              <motion.section
+                id="resume"
+                className="relative w-full"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                viewport={{ amount: viewportAmount }}
+              >
+                <Resume />
+              </motion.section>
+            )}
 
             {/* Timeline */}
             <motion.section

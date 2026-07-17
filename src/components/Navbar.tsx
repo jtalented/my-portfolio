@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const SHOW_RESUME_SECTION = false;
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
@@ -13,7 +15,7 @@ const Navbar = () => {
     { name: 'Tech Stack', href: '#tech-stack' },
     { name: 'Projects', href: '#projects' },
     { name: 'Experience', href: '#timeline' },
-    { name: 'Resume', href: '#resume' },
+    ...(SHOW_RESUME_SECTION ? [{ name: 'Resume', href: '#resume' }] : []),
     { name: 'Contact', href: '#contact' },
   ];
 
