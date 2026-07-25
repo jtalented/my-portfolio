@@ -19,7 +19,7 @@ const timelineData = [
     description: 'Graduated top of class with a 4.0 GPA.',
     category: 'Education',
     icon: '🎓'
-  },
+  },/*
   {
     year: '2020–2022',
     title: 'Volunteer Missionary',
@@ -27,7 +27,7 @@ const timelineData = [
       'Served a full-time mission. Led and trained teams of 6–10 missionaries, developed communication and leadership skills.',
     category: 'Service',
     icon: '🤝'
-  },
+  },**/
   {
     year: '2020–2025',
     title: 'B.S. Computer Science',

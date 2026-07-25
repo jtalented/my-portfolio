@@ -190,7 +190,7 @@ const About = () => {
               >
                 <div className="w-64 sm:w-80 h-80 sm:h-96 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 group-hover:border-slate-600/50 transition-all duration-500 backdrop-blur-sm bg-gradient-to-br from-slate-800 to-slate-900">
                   <motion.img
-                    src={`${import.meta.env.BASE_URL}images/IMG_1993 (3).PNG`}
+                    src={`${import.meta.env.BASE_URL}images/IMG_3629.jpg`}
                     alt="Jayden Allen"
                     className="w-full h-full object-cover"
                     initial={{ scale: 1.1 }}
