@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa';
+// import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import emailjs from 'emailjs-com';
 
 const Contact = () => {
@@ -237,7 +238,7 @@ const Contact = () => {
                 </div>
               </motion.a>
 
-              <motion.a
+              {/* <motion.a
                 href="https://github.com/jtalented"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -254,9 +255,9 @@ const Contact = () => {
                 <div className="text-slate-500 group-hover:text-slate-400 transition-colors">
                   <FaExternalLinkAlt className="text-sm" />
                 </div>
-              </motion.a>
+              </motion.a> */}
 
-              <motion.a
+              {/* <motion.a
                 href="https://www.linkedin.com/in/jayden-allen-aa2083277/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -273,7 +274,7 @@ const Contact = () => {
                 <div className="text-slate-500 group-hover:text-slate-400 transition-colors">
                   <FaExternalLinkAlt className="text-sm" />
                 </div>
-              </motion.a>
+              </motion.a> */}
             </div>
 
             {/* Additional info */}

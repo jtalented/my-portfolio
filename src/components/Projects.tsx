@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase } from 'react-icons/fa';
+// import { FaGithub } from 'react-icons/fa';
 import { SiTypescript, SiTailwindcss, SiMongodb, SiExpress, SiNextdotjs, SiVite } from 'react-icons/si';
 import { useRef } from 'react';
 
@@ -394,7 +395,7 @@ const Projects = () => {
                       
                       {/* Enhanced action buttons */}
                       <div className="flex gap-4">
-                        {project.github_url && (
+                        {/* {project.github_url && (
                           <motion.a
                             href={project.github_url}
                             target="_blank"
@@ -406,7 +407,7 @@ const Projects = () => {
                             <FaGithub className="text-lg" />
                             <span className="text-sm font-medium">Code</span>
                           </motion.a>
-                        )}
+                        )} */}
                         
                         {project.live_demo_url && (
                           <motion.a

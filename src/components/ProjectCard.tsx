@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase } from 'react-icons/fa';
+// import { FaGithub } from 'react-icons/fa';
 import { SiTypescript, SiTailwindcss, SiMongodb, SiExpress, SiNextdotjs, SiVite } from 'react-icons/si';
 
 interface Project {
@@ -134,8 +135,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-4 border-t border-slate-700/50">
-          <motion.a 
-            href={project.github_url} 
+          {/* <motion.a
+            href={project.github_url}
             target="_blank" 
             rel="noopener noreferrer" 
             className="flex items-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-600/50 text-white font-semibold rounded-xl transition-all duration-300 border border-slate-600/50 hover:border-slate-500/50 backdrop-blur-sm flex-1 justify-center"
@@ -144,7 +145,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           >
             <FaGithub className="text-lg" />
             <span>GitHub</span>
-          </motion.a>
+          </motion.a> */}
           
           {project.live_demo_url && (
             <motion.a 

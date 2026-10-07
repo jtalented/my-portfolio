@@ -183,7 +183,7 @@ const Navbar = () => {
                       </a>
                     </div>
                     
-                    <div>
+                    {/* <div>
                       <p className="text-xs md:text-sm font-medium text-red-400 mb-1 md:mb-2">GitHub</p>
                       <a 
                         href="https://github.com/jtalented" 
@@ -193,9 +193,9 @@ const Navbar = () => {
                       >
                         github.com/jtalented
                       </a>
-                    </div>
+                    </div> */}
                     
-                    <div>
+                    {/* <div>
                       <p className="text-xs md:text-sm font-medium text-pink-400 mb-1 md:mb-2">LinkedIn</p>
                       <a 
                         href="https://www.linkedin.com/in/jayden-allen-aa2083277/" 
@@ -205,7 +205,7 @@ const Navbar = () => {
                       >
                         linkedin.com/in/jayden-allen
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                   
                   {/* Footer Branding */}
@@ -234,4 +234,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
