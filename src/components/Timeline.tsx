@@ -19,7 +19,7 @@ const timelineData = [
     description: 'Graduated top of class with a 4.0 GPA.',
     category: 'Education',
     icon: '🎓'
-  },
+  },/*
   {
     year: '2020–2022',
     title: 'Volunteer Missionary',
@@ -27,10 +27,10 @@ const timelineData = [
       'Served a full-time mission. Led and trained teams of 6–10 missionaries, developed communication and leadership skills.',
     category: 'Service',
     icon: '🤝'
-  },
+  },**/
   {
     year: '2020–2025',
-    title: 'B.S. Computer Science – BYU',
+    title: 'B.S. Computer Science',
     description:
       'Studied systems, deep learning, and full-stack development. Graduated December 2025. GPA: 3.56.',
     category: 'Education',
@@ -38,7 +38,7 @@ const timelineData = [
   },
   {
     year: '2023–2025',
-    title: 'Full Stack Developer – BYU Office of IT',
+    title: 'Full Stack Developer – Office of Information Technology',
     description:
       'Led systems integration, mentored dev teams, and collaborated with cross-functional partners.',
     category: 'Work',

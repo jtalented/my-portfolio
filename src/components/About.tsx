@@ -97,7 +97,7 @@ const About = () => {
               >
                 <div className="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-orange-500 via-red-500 to-pink-500 rounded-full"></div>
                 <p>
-                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer and builder who thrives on solving complex problems with elegant, scalable solutions. I recently graduated with a degree in Computer Science from BYU, where I developed expertise in systems design, full-stack engineering, and innovative problem-solving.
+                  Hey, I'm <span className="font-semibold text-white bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">Jayden Allen</span> — a passionate developer and builder who thrives on solving complex problems with elegant, scalable solutions. I recently graduated with a degree in Computer Science, where I developed expertise in systems design, full-stack engineering, and innovative problem-solving.
                 </p>
               </motion.div>
               
@@ -190,7 +190,7 @@ const About = () => {
               >
                 <div className="w-64 sm:w-80 h-80 sm:h-96 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 group-hover:border-slate-600/50 transition-all duration-500 backdrop-blur-sm bg-gradient-to-br from-slate-800 to-slate-900">
                   <motion.img
-                    src={`${import.meta.env.BASE_URL}images/IMG_1993 (3).PNG`}
+                    src={`${import.meta.env.BASE_URL}images/IMG_3629.jpg`}
                     alt="Jayden Allen"
                     className="w-full h-full object-cover"
                     initial={{ scale: 1.1 }}
